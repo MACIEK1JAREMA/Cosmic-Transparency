@@ -31,7 +31,8 @@ count = list(count)
 #count = [int(x) for x in count]  # same thing, much slower
 
 # finding dl using list comprehension
-dl_model = [c*(1+z[j])*z[j]/(j*H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
+dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
+dl_model = (1+z)*z/(count) * dl_sum
 
 # set up figure and plot
 fig1 = plt.figure()
@@ -61,9 +62,11 @@ z = np.linspace(0, 1.8, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
+count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
 
 # model from list comprehension again
-dl1_model = [(1+z[j])*z[j]*c/(10*j*H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
+dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
+dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
 
 # set up figure and plot
 fig1 = plt.figure()
@@ -75,6 +78,12 @@ plt.plot(z, dl1_model)
 # %%
 
 # Plotting with data together:
+
+# define constants
+H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
+c = 3 * 10**8
+Om = 0.23
+OL = 0.77
 
 # Read in data as pandas dataframe
 df = pd.read_excel('data\\SNe data.xlsx')
@@ -100,6 +109,21 @@ ax.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
 # plot the data as errorbar plot
 ax.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
+
+# Calculate models:
+
+# Less accurate:
+z = np.linspace(0, 1.8, 100)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
+dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
+dl_model = (1+z)*z/(count) * dl_sum
+
+# more accurate
+z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
+count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
+dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
 
 # plot above models, with a legend:
 ax.plot(z, dl_model, 'r-', label='approximate')
