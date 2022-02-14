@@ -130,3 +130,50 @@ ax.plot(z, dl_model, 'r-', label='approximate')
 ax.plot(z, dl1_model, 'g-', label='more accurate')
 ax.legend()
 
+# %%
+
+# repeating the process but using mu
+
+# define constants
+H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
+c = 3 * 10**8
+Om = 0.23
+OL = 0.77
+
+# Read in data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+
+# sort it in increasing z:
+df = df.sort_values('z')
+
+# set up figure and visuals
+fig = plt.figure()
+ax = fig.gca()
+ax.set_xlabel(r'$Redshift \ z$', fontsize=16)
+ax.set_ylabel(r'$Distance \ Modulus \ \mu$', fontsize=16)
+
+# plot the data as errorbar plot
+ax.errorbar(df['z'], df['mu'], yerr=df['dmu'],
+            capsize=2, fmt='.', markersize=5, ecolor='k')
+
+# Calculate models:
+
+# Less accurate:
+z = np.linspace(0, 1.8, 100)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
+dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
+dl_model = (1+z)*z/(count) * dl_sum
+dlmu_model = 5*np.log10(dl_model) + 25
+
+# more accurate
+z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
+count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
+dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
+dl1mu_model = 5*np.log10(dl1_model) + 25
+
+# plot above models, with a legend:
+ax.plot(z, dlmu_model, 'r-', label='approximate')
+ax.plot(z, dl1mu_model, 'g-', label='more accurate')
+ax.legend()
