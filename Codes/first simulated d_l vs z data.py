@@ -100,7 +100,7 @@ df = df.sort_values('dL Mpc')
 ddL = 0.2*np.log(10)*10**(0.2*df['mu'] - 5) * df['dmu']
 df.insert(5, 'ddL Mpc', ddL)
 
-# plot it with errorbars:
+# set up figure and visuals
 fig = plt.figure()
 ax = fig.gca()
 ax.set_xlabel(r'$Redshift \ z$', fontsize=16)
@@ -111,6 +111,11 @@ ax.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
 
 # Calculate models:
+
+# set up axis
+z = np.linspace(0, 1.8, 100)  # defining 100
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
 
 # Less accurate:
 z = np.linspace(0, 1.8, 100)
@@ -157,6 +162,11 @@ ax.errorbar(df['z'], df['mu'], yerr=df['dmu'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
 
 # Calculate models:
+
+# set up axis
+z = np.linspace(0, 1.8, 100)  # defining 100
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
 
 # Less accurate:
 z = np.linspace(0, 1.8, 100)
