@@ -7,8 +7,11 @@ previously devleoped model, treating only Omega_{m} (Om) as a free parameter.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
-#%%
+# %%
+
+start_t = time.perf_counter()
 
 # Read in data as pandas dataframe
 df = pd.read_excel('data\\SNe data.xlsx')
@@ -20,7 +23,7 @@ c = 3 * 10**8
 OL = 0.77
 
 # set up the model axis
-Om = np.linspace(0, 1, 90)
+Om = np.linspace(0, 1, 200)
 z = np.linspace(0, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -41,9 +44,11 @@ while i < len(Om):
     # model from list comprehension
     dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+    # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25
-
-    interp = np.interp(df['z'], z, dl1mu_model)  # interpolate the values in the grid as they are generated
+    
+    # interpolate the values in the grid as they are generated
+    interp = np.interp(df['z'], z, dl1mu_model)
     
     # get chi^2 value for this Om and save to its array
     chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
@@ -59,7 +64,10 @@ index = chisq_array.argmin()
 min_Om = Om[index]
 min_chisq = chisq_array[index]
 
-print('minimising chisquared gives a matter density of ', min_Om)
+print('minimising \chi^2 gives a matter density of ', min_Om)
+
+end_t = time.perf_counter()
+print(f'time to run: {round(end_t - start_t, 5)} s')
 
 # %%
 
