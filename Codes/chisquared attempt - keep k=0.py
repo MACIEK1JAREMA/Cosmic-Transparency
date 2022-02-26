@@ -56,7 +56,7 @@ while i < len(Om):
     i += 1
 
 # plot chi^2 against Omega_m
-ax.plot(Om, chisq_array)
+ax.plot(Om, chisq_array, label = '$H_0 \ = \ 70 \ km \ s^{-1} \ Mpc^{-1}$')
 
 # get minimum value for Om and chi^2
 index = chisq_array.argmin()
@@ -96,12 +96,12 @@ df.insert(5, 'ddL Mpc', ddL)
 
 # set up figure and visuals
 fig = plt.figure()
-ax = fig.gca()
-ax.set_xlabel(r'$Redshift \ z$', fontsize=16)
-ax.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
+ax1 = fig.gca()
+ax1.set_xlabel(r'$Redshift \ z$', fontsize=16)
+ax1.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
 
 # plot the data as errorbar plot
-ax.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
+ax1.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
 
 # Calculate models:
@@ -117,7 +117,7 @@ dl1_sum = [(c/H0) * np.sum(1/np.sqrt(min_Om*(1+z10[:int(len(z10)/len(z))*j + 1])
 dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
 
 # plot above models, with a legend:
-ax.plot(z, dl1_model, 'g-', label=rf'$Model \ with \ \chi^2 \ minimised \ \Omega_m \ = \ {round(min_Om, 4)}$')
+ax1.plot(z, dl1_model, 'g-', label=rf'$Model \ with \ \chi^2 \ minimised \ \Omega_m \ = \ {round(min_Om, 4)}$')
 
 
 # plot with Om = 0.23
@@ -125,7 +125,112 @@ dl1_sum = [(c/H0) * np.sum(1/np.sqrt(0.23*(1+z10[:int(len(z10)/len(z))*j + 1])**
 dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
 
 # plot above models, with a legend:
-ax.plot(z, dl1_model, 'r-', label=rf'$Model \ with \ \Omega_m \ = \ 0.23$')
+ax1.plot(z, dl1_model, 'r-', label=rf'$Model \ with \ \Omega_m \ = \ 0.23$')
+
+ax1.legend()
+# %%
+
+#repeating the process but for different possible H0 predicted by Lambda CDM model
+
+H0_lambdacdm = 67*10**3
+
+# Read in data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # increasing z sort
+
+# define constants
+
+c = 3 * 10**8
+
+# set up the model axis
+Om = np.linspace(0, 1, 100)
+z = np.linspace(0, 1.8, 100)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
+
+z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
+count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+
+
+i = 0
+chisq_array = np.array([])
+
+while i < len(Om):
+    # model from list comprehension
+    dl1_sum = [(c/H0_lambdacdm) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
+    dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+    # convert to mu vs z to compare to data.
+    dl1mu_model = 5*np.log10(dl1_model) + 25
+    
+    # interpolate the values in the grid as they are generated
+    interp = np.interp(df['z'], z, dl1mu_model)
+    
+    # get chi^2 value for this Om and save to its array
+    chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
+    chisq_array = np.append(chisq_array, chisq)
+    
+    i += 1
+
+# plot chi^2 against Omega_m
+ax.plot(Om, chisq_array, label = '$H_0 \ = \ 67 \ km \ s^{-1} \ Mpc^{-1}$')
+
+# get minimum value for Om and chi^2
+index = chisq_array.argmin()
+min_Om = Om[index]
+min_chisq = chisq_array[index]
+
+print('minimising \chi^2 gives a matter density of ', min_Om)
+ax.legend()
+# %%
+
+# repeating process for WMAP H0
+H0_lambdacdm = 73*10**3
+
+# Read in data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # increasing z sort
+
+# define constants
+
+c = 3 * 10**8
+
+# set up the model axis
+Om = np.linspace(0, 1, 100)
+z = np.linspace(0, 1.8, 100)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
+
+z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
+count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+
+
+i = 0
+chisq_array = np.array([])
+
+while i < len(Om):
+    # model from list comprehension
+    dl1_sum = [(c/H0_lambdacdm) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
+    dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+    # convert to mu vs z to compare to data.
+    dl1mu_model = 5*np.log10(dl1_model) + 25
+    
+    # interpolate the values in the grid as they are generated
+    interp = np.interp(df['z'], z, dl1mu_model)
+    
+    # get chi^2 value for this Om and save to its array
+    chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
+    chisq_array = np.append(chisq_array, chisq)
+    
+    i += 1
+
+# plot chi^2 against Omega_m
+ax.plot(Om, chisq_array, label = '$H_0 \ = \ 73 \ km \ s^{-1} \ Mpc^{-1}$')
+
+# get minimum value for Om and chi^2
+index = chisq_array.argmin()
+min_Om = Om[index]
+min_chisq = chisq_array[index]
+
+print('minimising \chi^2 gives a matter density of ', min_Om)
 
 ax.legend()
-
