@@ -42,43 +42,30 @@ chisq_array = np.array([])
 
 while i < len(Om):
     # model from list comprehension
+    # for each Om at const OL, curvature changes, account for it in fucntional
+    # form:
+    
+    # for current Om and OL find the array (with z) of Ok
+    Ok = (1/c) * np.sqrt(abs(1-Om[i]-OL)/(1+z)**2)
+    
     if Om[i] + OL == 1:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
         dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
-        # convert to mu vs z to compare to data.
-        dl1mu_model = 5*np.log10(dl1_model) + 25
-        
-        # interpolate the values in the grid as they are generated
-        interp = np.interp(df['z'], z, dl1mu_model)
-        
-        # get chi^2 value for this Om
-        chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
-
-    elif Om[i] + OL <1:
+    elif Om[i] + OL < 1:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
-        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
-        # convert to mu vs z to compare to data.
-        dl1mu_model = 5*np.log10(dl1_model) + 25
-        
-        # interpolate the values in the grid as they are generated
-        interp = np.interp(df['z'], z, dl1mu_model)
-        
-        # get chi^2 value for this Om
-        chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
-        chisq_array = np.append(chisq_array, chisq)
-        
+        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sinh(Ok*dl1_sum)
     else:
-        
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
-        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
-        # convert to mu vs z to compare to data.
-        dl1mu_model = 5*np.log10(dl1_model) + 25
-        
-        # interpolate the values in the grid as they are generated
-        interp = np.interp(df['z'], z, dl1mu_model)
-        
-        # get chi^2 value for this Om
-        chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
+        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sin(Ok * dl1_sum)
+    
+    # convert to mu vs z to compare to data.
+    dl1mu_model = 5*np.log10(dl1_model) + 25
+    
+    # interpolate the values in the grid as they are generated
+    interp = np.interp(df['z'], z, dl1mu_model)
+    
+    # get chi^2 value for this Om
+    chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
     
     # save to array
     chisq_array = np.append(chisq_array, chisq)
@@ -99,8 +86,11 @@ print(f'time to run: {round(end_t - start_t, 5)} s')
 
 # %%
 
-# develop the model that corresponds to the found Om, and plot it o data
+# develop the model that corresponds to the found Om, and plot it on data
 # also plot the one when using Om = 0.23
+
+# Only run once the previous cell has been run
+# to develop the model parameter first
 
 # Plotting with data together:
 
