@@ -128,3 +128,55 @@ dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
 ax1.plot(z, dl1_model, 'r-', label=rf'$Model \ with \ \Omega_m \ = \ 0.23$')
 
 ax1.legend()
+# %%
+
+#plotting in the relevant bounds
+Delta_squared = 20
+max_y = min_chisq + Delta_squared
+j = 0
+while j < len(chisq_array):
+    if chisq_array[j] > max_y:
+        
+        chisq_array = np.delete(chisq_array, j)
+        Om = np.delete(Om, j)
+        j=0
+    else:
+        j+=1
+
+fig = plt.figure()
+ax1 = fig.gca()
+ax1.set_xlabel(r'$\Omega_{m} $', fontsize=16)
+ax1.set_ylabel(r'$\chi^2$', fontsize=16)
+
+ax1.plot(Om, chisq_array, label='$H_0 \ = \ 70 \ km \ s^{-1} \ Mpc^{-1}$', color = 'black')
+
+chi_1s = min_chisq+1
+chi_2s = min_chisq+2.71
+chi_3s = min_chisq+9 
+
+ax1.axhline(y = chi_1s, color = 'r', ls='-.', label = '$1 \sigma$  confidence region')
+ax1.axhline(y = chi_2s, color = 'g', ls='-.', label = '$2 \sigma$  confidence region')
+ax1.axhline(y = chi_3s, color = 'b', ls='-.', label = '$3 \sigma$  confidence region')
+ax1.legend()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

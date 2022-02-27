@@ -7,13 +7,13 @@ we do so on the example of k=0 models with chi^2 analysis
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import time
+
 
 # %%
 
 # Define constants
 H0_lambdacdm = 67*10**3  # H0 approximately as found by distance ladder, predicted by LCDM
-H0_WAMP = 73*10**3  # WMAP H0
+H0_SHOES = 73*10**3  # WMAP H0
 H0_mean = 70*10**3
 c = 3 * 10**8  # light speed
 
@@ -101,7 +101,7 @@ chisq_array_WMAP = np.array([])
 
 while i < len(Om):
     # model from list comprehension
-    dl1_sum = [(c/H0_WAMP) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
+    dl1_sum = [(c/H0_SHOES) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
     # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25

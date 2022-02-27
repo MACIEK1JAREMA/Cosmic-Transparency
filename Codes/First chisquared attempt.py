@@ -51,13 +51,13 @@ while i < len(Om):
     if Om[i] + OL == 1:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
         dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
-    elif Om[i] + OL < 1:
+    elif (Om[i] + OL) < 1:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
-        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sinh(Ok*dl1_sum)
+        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sin(Ok*dl1_sum)
+
     else:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
-        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sin(Ok * dl1_sum)
-    
+        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))] * Ok) * np.sinh(Ok * dl1_sum)
     # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25
     
