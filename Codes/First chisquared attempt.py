@@ -46,7 +46,7 @@ while i < len(Om):
     # form:
     
     # for current Om and OL find the array (with z) of Ok
-    Ok = (1/c) * np.sqrt(abs(1-Om[i]-OL)/(1+z)**2)
+    Ok = np.sqrt(abs(1-Om[i]-OL)/(1+z)**2)
     
     if Om[i] + OL == 1:
         dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1+z10[:int(len(z10)/len(z))*j + 1])**3 + OL)) for j in count[:]]
