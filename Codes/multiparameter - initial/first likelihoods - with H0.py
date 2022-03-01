@@ -115,6 +115,8 @@ ax3.set_zlabel('likelihood', fontsize=16)
 
 # %%
 
+# Mrginalised over H0 with full range:
+
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
 chisq_array_init = np.array(chisq_df)
@@ -131,6 +133,65 @@ chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
 index = np.unravel_index(np.argmin(chisq_array, axis=None), chisq_array.shape)
 min_Om = Om[index[0]]
 min_H0 = H0[index[1]]
+
+# switch to likelihoods
+likelihood = np.exp((-chisq_array**2)/2)
+
+# marginalising over H0 - with flat prior:
+lik_margin = np.sum(likelihood, axis=0)
+
+# normalise to sum=1
+lik_margin /= np.sum(lik_margin)
+
+# set up figure + visuals and plot it:
+fig5 = plt.figure()
+ax5 = fig5.gca()
+ax5.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=16)
+ax5.set_xlabel(r'$\Omega_{m}$', fontsize=16)
+ax5.plot(Om, lik_margin)
+
+# find peak value and where 68.3% of it lies for 1 \sigma error
+Om_found = Om[np.where(lik_margin == np.max(lik_margin))[0]]
+
+variables = st.rv_discrete(values=(Om, lik_margin))
+confidence1 = variables.interval(0.683)[1] - Om_found
+confidence2 = Om_found - variables.interval(0.683)[0]
+
+print(f'Om = {round(Om_found[0], 5)}')
+print('\n')
+print(f'with confidence: \n')
+print(f'                +{round(confidence1[0], 6)}')
+print(f'                -{round(confidence2[0], 6)}')
+
+
+# %%
+
+# Marginalised over H0, in upto 20 in delta chi^2 for Om
+
+# Read in generated array for chi^2
+chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_array_init = np.array(chisq_df)
+chisq_array = chisq_array_init[:, 1:]
+
+# set up the model axis
+H0 = np.linspace(70, 76, 300)*10**3
+Om = np.linspace(0, 1, 300)
+z = np.linspace(0, 1.8, 100)
+c = 3 * 10**8  # light speed
+
+# finding minimum of chisquared coords
+chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
+index = np.unravel_index(np.argmin(chisq_array, axis=None), chisq_array.shape)
+min_Om = Om[index[0]]
+min_H0 = H0[index[1]]
+
+# reduce to wanted range
+Delta_squared = 20
+in_index = np.where(chisq_array <= Delta_squared)
+chisq_array = chisq_array[in_index[0], in_index[1]]  # only keep in wanted region
+
+Om = Om[in_index[0]]  # crop Om accordingly
+H0 = H0[in_index[1]]  # crop H0 accordingly
 
 # switch to likelihoods
 likelihood = np.exp((-chisq_array**2)/2)
