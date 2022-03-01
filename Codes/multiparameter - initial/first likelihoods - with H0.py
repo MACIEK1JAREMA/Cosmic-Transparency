@@ -138,7 +138,7 @@ min_H0 = H0[index[1]]
 likelihood = np.exp((-chisq_array**2)/2)
 
 # marginalising over H0 - with flat prior:
-lik_margin = np.sum(likelihood, axis=0)
+lik_margin = np.sum(likelihood, axis=1)
 
 # normalise to sum=1
 lik_margin /= np.sum(lik_margin)
