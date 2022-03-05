@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from mpl_toolkits.mplot3d import Axes3D
 import scipy.stats as st
+import Codes.Module as module
 
 
 def integrate(F, x_min, x_max, axis=0):
@@ -224,5 +225,74 @@ contourplot = ax3.contour(Hgrid/1000, Omgrid, weighted[60:90, :], np.linspace(0,
 ax3.clabel(contourplot)
 fig3.colorbar(heatmap)
 
+# %%
+
+# Plotting likelihood contours with our confidence regions finder:
+
+
+# Read in Sne data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # increasing z sort
+
+# Read in generated array
+chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_array_init = np.array(chisq_df)
+chisq_array = chisq_array_init[:, 1:]
+
+# define constant
+c = 3 * 10**8
+
+# set up the model axis
+H0 = np.linspace(70, 76, 300)*10**3
+Om = np.linspace(0, 1, 300)
+z = np.linspace(0, 1.8, 100)
+
+# finding minimum of chisquared coords
+chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
+
+# defining Gaussian
+g = np.exp(-(H0/1000-73)**2/2)/np.sqrt(2*np.pi)
+
+# switch to likelihoods
+likelihood = np.exp((-chisq_array**2)/2)
+
+# multipying likelihood by Gaussian
+weighted = np.multiply(likelihood, g)
+
+# marginalising over H0 using written function
+lik_margin = integrate(weighted, H0[0], H0[-1], axis=0)
+
+# normalising
+lik_margin /= np.sum(lik_margin)
+
+# find peak value and where 68.3% of it lies for 1 \sigma error
+Om_found = Om[np.where(lik_margin == np.max(lik_margin))[0]]
+variables = st.rv_discrete(values=(Om, lik_margin))
+confidence1 = variables.interval(0.683)[1] - Om_found
+confidence2 = Om_found - variables.interval(0.683)[0]
+
+# Get confidence heights and plot these as contours with colourmap
+
+# normalise it to Volume = 1: with our integrate 2D fucntion:
+Hgrid, Omgrid = np.meshgrid(H0, Om)
+norm = module.integrate2D(weighted, Hgrid, Omgrid, interp=1000)
+weighted *= 1/norm
+
+# return for user to inspect
+print(f'Our integration of likelihood before normalising: {np.round(norm, 4)}')
+
+# give it to the confidence fucntion to get sigma regions:
+heights = module.confidence(weighted, Hgrid, Omgrid, accu=1000, interp=1000)
+
+# plot contours on confidence regions and colourmap
+fig3 = plt.figure()
+ax3 = fig3.gca()
+ax3.tick_params(labelsize=16)
+ax3.set_ylabel(r'$\Omega_{m} $', fontsize=20)
+ax3.set_xlabel(r'$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=20)
+
+heatmap = ax3.pcolormesh(Hgrid/1000, Omgrid, weighted)
+contourplot = ax3.contour(Hgrid/1000, Omgrid, weighted, heights, cmap=cm.jet)
+fig3.colorbar(heatmap)
 
 

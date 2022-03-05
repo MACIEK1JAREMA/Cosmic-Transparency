@@ -1,6 +1,5 @@
 '''
-Here, we develop and test a function that will find confidence regions
-of N dimensionsal (1, 2, 3) functions and optionally plot them
+Contains functions we continiously use
 '''
 
 import numpy as np
@@ -120,90 +119,3 @@ def confidence(F, xg, yg, accu, interp, interp_kind='linear'):
     s3_height = heights[s3_indx][0]
     
     return [s3_height, s2_height, s1_height]
-
-
-# test the above
-if __name__ == '__main__':
-    # define 2D grids
-    v = np.linspace(0, 1, 100)
-    xg, yg = np.meshgrid(v, v)
-    
-    # define a 2D unnormalised gaussian:
-    F = xg*yg**2
-    
-    # normalise it to Volume = 1: with our integrate 2D fucntion:
-    norm = integrate2D(F, xg, yg, interp=1000)
-    F *= 1/norm
-    
-    # check that it's right by analytical result
-    print(f'For F(x, y)= x*y^2 in [0, 1]^2 we expect volume of  {np.round(1/6, 4)}')
-    print('\n')
-    print(f'Our intgeration fucntion gave: {np.round(norm, 4)}')
-    
-    # give it to the confidence fucntion to get sigma regions:
-    heights = confidence(F, xg, yg, accu=1000, interp=1000)
-    
-    # plot these as contours on a conour map
-    fig = plt.figure()
-    ax = fig.gca()
-    ax.tick_params(labelsize=16)
-    ax.set_xlabel(r'$x$', fontsize=20)
-    ax.set_ylabel(r'$y$', fontsize=20)
-    heatmap = ax.pcolormesh(xg, yg, F)
-    contourplot = ax.contour(xg, yg, F, heights, cmap=cm.jet)
-    ax.clabel(contourplot, fontsize=16)
-    fig.colorbar(heatmap)
-
-
-# %%
-
-# extra convergence of 2D integration
-if __name__ == '__main__':
-    
-    # define array of accuracies:
-    accu = np.linspace(10, 200, 10)
-    
-    # loop over each finding norms:
-    norms = []
-    for a in accu:
-        # define starting 2D grids
-        v = np.linspace(0, 1, a)
-        xg, yg = np.meshgrid(v, v)
-        
-        # define a 2D unnormalised gaussian:
-        F = xg*yg**2
-        
-        # normalise it to Volume = 1: with our integrate 2D fucntion:
-        norm = integrate2D(F, xg, yg)
-        F *= 1/norm
-        # save it
-        norms.append(norm)
-    
-    # find error:
-    change = abs((np.diff(norms) / norms[:-1])*100)
-    
-    # plot:
-    fig1 = plt.figure()
-    ax1 = fig1.gca()
-    ax1.tick_params(labelsize=16)
-    ax1.set_xlabel(r'$grid \ accuracy$', fontsize=20)
-    ax1.set_ylabel(r'$relative \ error \ [\%]$', fontsize=20)
-    ax1.plot(accu[1:], change)
-    
-    # plot horizontal levels for reference
-    ax1.axhline(1, color='r', ls='-.', label=r'$1\%$')
-    ax1.axhline(0.5, color='g', ls='-.', label=r'$0.5\%$')
-    ax1.axhline(0.1, color='b', ls='-.', label=r'$0.1\%$')
-    ax1.axhline(0.01, color='orange', ls='-.', label=r'$0.01\%$')
-    
-    ax1.legend(fontsize=20)
-
-
-
-
-
-
-
-
-
-
