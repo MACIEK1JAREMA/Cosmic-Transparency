@@ -119,3 +119,86 @@ def confidence(F, xg, yg, accu, interp, interp_kind='linear'):
     s3_height = heights[s3_indx][0]
     
     return [s3_height, s2_height, s1_height]
+
+
+# function to plot confidence intervals on a 1D chi^2
+def chi_confidence1D(y, x, axis, colors=['r', 'g', 'b'], labels=True, interp=10000):
+    '''
+    Finds and plots default confidence interval lines for 1D chi^2
+    The inuput y axis must be chi^2, reduced to minimum at y=0.
+    
+    Prameters:
+        ---------------
+        - y - numpy.ndarray y values
+        - x - numpy.ndarray x values
+        - indx1 - index of intersection with line at 1 sigma
+        - indx2 - index of intersection with line at 2 sigma
+        - indx3 - index of intersection with line at 3 sigma
+        - ax - matplotlib axis to plot on
+        - colors - colours to use for lines at the 3 intervals, in order
+                   default = ['r', 'g', 'b']
+        - labels - bool - default = True, defines if legend is to draw
+        -- interp - int, if > 10, we interpolate grids and F to that size,
+                 default = 0
+    Returns:
+        None, plots on given axis
+    '''
+    
+    
+    # add plot of convergence:
+    if interp > 10:
+        y = np.interp(np.linspace(x[0], x[-1], interp), x, y)
+        x = np.linspace(x[0], x[-1], interp)
+        indx1 = np.argwhere(np.diff(np.sign(y - np.ones(np.shape(y)))))
+        indx2 = np.argwhere(np.diff(np.sign(y - 2.71*np.ones(np.shape(y)))))
+        indx3 = np.argwhere(np.diff(np.sign(y - 9*np.ones(np.shape(y)))))
+        
+    # get values of intersections
+    x1 = x[indx1]
+    y1 = y[indx1]
+    x2 = x[indx2]
+    y2 = y[indx2]
+    x3 = x[indx3]
+    y3 = y[indx3]
+    
+    # plot horizontally
+    if labels:
+        axis.plot(x1, y1, color='r', ls='-.', label=r'$1 \sigma$')
+        axis.plot(x2, y2, color='g', ls='-.', label=r'$2 \sigma$')
+        axis.plot(x3, y3, color='b', ls='-.', label=r'$3 \sigma$')
+    else:
+        axis.plot(x1, y1, color='r', ls='-.')
+        axis.plot(x2, y2, color='g', ls='-.')
+        axis.plot(x3, y3, color='b', ls='-.')
+    
+    # organise intersections into a list for loop
+    xs = [x1[0], x1[1], x2[0], x2[1], x3[0], x3[1]]
+    ys = [y1[0], y1[1], y2[0], y2[1], y3[0], y3[1]]
+    
+    # loop over plotting each vertical line
+    for i in range(3):
+        axis.axvline(xs[2*i], ymin=0, ymax=(ys[2*i]-axis.get_ybound()[0])/axis.get_ybound()[1], color=colors[i], ls='-.')
+        axis.axvline(xs[2*i+1], ymin=0, ymax=(ys[2*i+1]-axis.get_ybound()[0])/axis.get_ybound()[1], color=colors[i], ls='-.')
+        
+    if labels:
+        axis.legend()
+    else:
+        pass
+
+
+# example of chi_confidence1D use:
+if __name__ == '__main__':
+    x = np.linspace(-2, 4, 100)
+    
+    chi = 5*(x-2)**2
+    
+    fig = plt.figure()
+    ax = fig.gca()
+    ax.set_xlabel(r'$x$')
+    ax.set_ylabel(r'$\chi^2$')
+    ax.plot(x, chi)
+    
+    chi_confidence1D(chi, x, ax)
+
+
+# %%
