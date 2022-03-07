@@ -26,15 +26,16 @@ df = df.sort_values('z')  # increasing z sort
 c = 3 * 10**8
 
 # set up the model axis
-H0 = np.linspace(70, 76, 300)*10**3
+H0 = np.linspace(60, 80, 300)*10**3
 
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+
+z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+count10 = np.linspace(0, len(z10)-1, len(z10)).astype(int)+1
 
 i = 0
 k = 0
@@ -57,8 +58,24 @@ while i < len(H0):
         chisq_array[k, i] = chisq
         
         k += 1
+    print(i)
     i += 1
 
 # time to run
 end_t = time.perf_counter()
 print(f'time to run: {round(end_t - start_t, 5)} s')
+
+#%%
+
+dataframe = pd.DataFrame(chisq_array)
+
+# writing to Excel
+datatoexcel = pd.ExcelWriter('(60-80) redone.xlsx')
+  
+# write DataFrame to excel
+dataframe.to_excel(datatoexcel)
+  
+# save the excel
+datatoexcel.save()
+print('DataFrame is written to Excel File successfully.')
+
