@@ -67,7 +67,7 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0.001, 1.8, 100)
+z = np.linspace(0, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 

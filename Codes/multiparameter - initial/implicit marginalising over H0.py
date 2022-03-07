@@ -77,11 +77,11 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0.001, 1.8, 100)
+z = np.linspace(0, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
-z10 = np.linspace(0.001, 1.8, 1000)  # inetrgal approximation axis
+z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
 count10 = np.array((np.linspace(0, len(z10)-1, len(z10)).astype(int))) +1
 
 # develop models for each Om, get it's theoretical M and chi^2

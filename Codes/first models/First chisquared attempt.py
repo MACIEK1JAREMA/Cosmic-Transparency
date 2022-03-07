@@ -29,7 +29,7 @@ count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 z10 = np.linspace(0, 1.8, 3000)  # inetrgal approximation axis
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+count10 = np.array(np.linspace(0, len(z10)-1, len(z10)).astype(int)) + 1
 
 # set up figure and visuals for chi^2 plot
 fig = plt.figure()
