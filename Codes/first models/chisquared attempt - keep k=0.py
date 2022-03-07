@@ -67,12 +67,12 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(0.001, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+count10 = np.array(list(np.linspace(0, len(z10)-1, len(z10)).astype(int)))+1
 
 i = 0
 chisq_array = np.array([])
@@ -114,6 +114,7 @@ fig = plt.figure()
 ax1 = fig.gca()
 ax1.set_xlabel(r'$\Omega_{m} $', fontsize=16)
 ax1.set_ylabel(r'$\chi^2$', fontsize=16)
+
 ax1.set_ylim(0, 20)
 
 ax1.plot(Om, chisq_array, label='$\chi^2 \ of \ model \ with \ H_0=70 \ km s^{-1} Mpc^{-1}$', color='k')
