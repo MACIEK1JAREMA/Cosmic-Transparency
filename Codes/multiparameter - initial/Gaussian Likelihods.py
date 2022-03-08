@@ -55,7 +55,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
@@ -154,7 +154,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
@@ -245,7 +245,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0

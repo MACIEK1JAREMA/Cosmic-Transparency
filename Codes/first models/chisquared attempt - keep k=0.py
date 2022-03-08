@@ -68,11 +68,12 @@ c = 3 * 10**8
 # set up the model axis
 Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 100)
+#z = np.linspace(0, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = np.linspace(0, len(z10)-1, len(z10)).astype(int)+1
+count10 = np.linspace(0, len(z10)-1, len(z10)).astype(int) + 1
 
 i = 0
 chisq_array = np.array([])
@@ -105,15 +106,21 @@ min_chisq = chisq_array[index]
 # plotting in the relevant bounds with confidence regions
 Delta_squared = 20
 
+fig = plt.figure()
+ax = fig.gca()
+ax.set_xlabel(r'$\Omega_{m} $', fontsize=20)
+ax.set_ylabel(r'$\chi^2$', fontsize=20)
+ax.plot(Om, chisq_array)
+
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
 in_index = np.where(chisq_array <= Delta_squared)
 chisq_array = chisq_array[in_index]  # only keep in wanted region
 Om = Om[in_index]  # crop Om accordingly
 
-fig = plt.figure()
-ax1 = fig.gca()
-ax1.set_xlabel(r'$\Omega_{m} $', fontsize=16)
-ax1.set_ylabel(r'$\chi^2$', fontsize=16)
+fig1 = plt.figure()
+ax1 = fig1.gca()
+ax1.set_xlabel(r'$\Omega_{m} $', fontsize=20)
+ax1.set_ylabel(r'$\chi^2$', fontsize=20)
 
 ax1.set_ylim(0, 20)
 
@@ -186,7 +193,7 @@ ax1.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
 # Calculate models:
 
 # set up axis
-z = np.linspace(0, 1.8, 100)  # for model
+z = np.linspace(np.min(df['z']), 1.8, 100)  # for model
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 z10 = np.linspace(0, 1.8, 1000)  # for integral approximation

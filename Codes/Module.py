@@ -141,17 +141,22 @@ def chi_confidence1D(y, x, axis, colors=['r', 'g', 'b'], labels=True, interp=100
         -- interp - int, if > 10, we interpolate grids and F to that size,
                  default = 0
     Returns:
-        None, plots on given axis
+        1 sigma x values as list in format [-error, +error]
     '''
     
-    
-    # add plot of convergence:
+    # interpolate if user wished to
     if interp > 10:
         y = np.interp(np.linspace(x[0], x[-1], interp), x, y)
         x = np.linspace(x[0], x[-1], interp)
-        indx1 = np.argwhere(np.diff(np.sign(y - np.ones(np.shape(y)))))
-        indx2 = np.argwhere(np.diff(np.sign(y - 2.71*np.ones(np.shape(y)))))
-        indx3 = np.argwhere(np.diff(np.sign(y - 9*np.ones(np.shape(y)))))
+    
+    # get indexes of sigma level intersections
+    indx1 = np.argwhere(np.diff(np.sign(y - np.ones(np.shape(y)))))
+    indx2 = np.argwhere(np.diff(np.sign(y - 2.71*np.ones(np.shape(y)))))
+    indx3 = np.argwhere(np.diff(np.sign(y - 9*np.ones(np.shape(y)))))
+    
+    # get minimum and so mean x measurement:
+    indx_min = np.where(y == np.min(y))
+    x_mean = x[indx_min]
         
     # get values of intersections
     x1 = x[indx1]
@@ -184,6 +189,9 @@ def chi_confidence1D(y, x, axis, colors=['r', 'g', 'b'], labels=True, interp=100
         axis.legend()
     else:
         pass
+    
+    # return values of 1 sigma regions
+    return x_mean[0] - x1[0], x1[1] - x_mean[0]
 
 
 # example of chi_confidence1D use:

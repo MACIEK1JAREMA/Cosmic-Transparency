@@ -19,7 +19,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(60-80).xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -29,7 +29,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
@@ -71,7 +71,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_df = pd.read_excel('data\\(70-76) redone.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -81,7 +81,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
@@ -126,7 +126,7 @@ chisq_array = chisq_array_init[:, 1:]
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 c = 3 * 10**8  # light speed
 
 # finding minimum of chisquared coords
@@ -183,7 +183,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0

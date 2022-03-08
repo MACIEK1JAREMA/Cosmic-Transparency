@@ -77,7 +77,8 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+#z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
@@ -93,6 +94,8 @@ while i < len(Om):
     # model from list comprehension
     dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
     dl_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl_sum
+    
+    #dl_model[0] = dl_model[1] - (dl_model[2] - dl_model[1])
     
     # interpolate the values to match data size
     dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
@@ -159,10 +162,9 @@ print('the starndard deviation was found to be:')
 print(f' + {Omi[indx1[1]] - Om[np.where(chisq_array == np.min(chisq_array))[0][0]]}')
 print(f' - {Om[np.where(chisq_array == np.min(chisq_array))[0][0]] - Omi[indx1[0]]}')
 
-#%%
-#Plotting default chisquared for different M to illustrate dependence (can delete later)
+# %%
 
-
+# Plotting default chisquared for different M to illustrate dependence (can delete later)
 
 # Read in data as pandas dataframe
 df = pd.read_excel('data\\SNe data.xlsx')
@@ -217,35 +219,3 @@ while k < len(M):
 
 plt.title('$\chi^2 \ of \ model \ with \ H_0=70 \ km s^{-1} Mpc^{-1}$')
 ax1.legend()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

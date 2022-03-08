@@ -106,7 +106,7 @@ ax2.set_ylim(0, 20)
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis

@@ -49,6 +49,10 @@ for accu in accuracy:
 
 # Models sampled at 4 z values, relative errors plotted for each
 
+# Read in data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # sort it in increasing z
+
 # define constants
 H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
 c = 3 * 10**8
@@ -69,21 +73,21 @@ ax3.set_ylabel(r'$relative \ error\  [\%] $', fontsize=16)
 # Calculate the model for a rnage of accuracies in z10, saving a few chosen dL
 
 # set up needed arrays
-z = np.linspace(0, 1.8, 100)  # defining 100
+z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 # set up an array of accuracies and empty lists to store 5 smapled dL
-accuracy = np.arange(100, 2001, 100)
+accuracy = np.arange(100, 1000, 100)
 dL_sampled = np.empty((4, len(accuracy)))
-z_i = [1, 32, 67, 77]  # indexes of z at which we save dL
+z_i = [2, 32, 67, 77]  # indexes of z at which we save dL
 num = len(z_i)
 i = 0  # counting variable for indexes from accu
 
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
     z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = list(np.linspace(0, accu-1, accu).astype(int))
+    count10 = np.linspace(0, accu-1, accu).astype(int) + 1
     dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
     # add sampled points to saving array:
@@ -99,12 +103,6 @@ for i in range(num):
 # #############################################################################
 # for each z_i, find average error in the data points at z nearby
 # #############################################################################
-
-# Read in data as pandas dataframe
-df = pd.read_excel('data\\SNe data.xlsx')
-
-# sort it in increasing z:
-df = df.sort_values('z')
 
 # convert the mu data to d_L, make it a new column and sort w.r.t it
 df_dL = 10**(0.2*df['mu'] - 5)
