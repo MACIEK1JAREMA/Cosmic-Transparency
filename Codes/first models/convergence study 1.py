@@ -12,6 +12,10 @@ import pandas as pd
 
 # Models at different accuracies superposed
 
+# Read in data as pandas dataframe
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # sort it in increasing z
+
 # define constants
 H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
 c = 3 * 10**8
@@ -27,8 +31,8 @@ ax.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
 # Calculate the model for a rnage of accuracies in z10
 
 # set up needed arrays
-z = np.linspace(0, 1.8, 100)  # defining 100
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
+z = np.linspace(np.min(df['z']), 1.8, 100) # defining 100
+count = np.linspace(0, len(z)-1, len(z)).astype(int) + 1
 count = list(count)
 
 # set up an array of accuracies to use:
@@ -37,10 +41,10 @@ accuracy = np.arange(100, 2001, 100)
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
     z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = list(np.linspace(0, accu-1, accu).astype(int))
+    count10 = np.linspace(0, accu-1, accu).astype(int) +1
     dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
-    
+
     # plot above models, with a legend:
     ax.plot(z, dl1_model, label=f'{accu} points in sum')
     ax.legend()
@@ -87,7 +91,7 @@ i = 0  # counting variable for indexes from accu
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
     z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = np.linspace(0, accu-1, accu).astype(int) + 1
+    count10 = np.linspace(0, accu-1, accu).astype(int)+1
     dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
     # add sampled points to saving array:
@@ -162,7 +166,7 @@ OL = 0.77
 # Calculate the model for a rnage of accuracies in z10, saving at chosen dL
 
 # set up needed arrays
-z = np.linspace(0, 1.8, 100)  # defining 100
+z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
@@ -174,7 +178,7 @@ i = 0  # counting variable for indexes from accu
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
     z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = list(np.linspace(0, accu-1, accu).astype(int))
+    count10 = np.linspace(0, accu-1, accu).astype(int)+1
     dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
     dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
     # save last point for this accuracy
@@ -223,6 +227,7 @@ data_in = df['mu'][indexes_in]
 errors_in = df['dmu'][indexes_in]
 rels_in = errors_in/data_in
 data_err = np.mean(rels_in) * 100
+
 
 # plot horizontal lines at 2%, 1%, 0.5% and 0.1%
 ax.axhline(y=data_err, color='c', ls='-.', label=rf'${round(data_err, 2)} \% $')

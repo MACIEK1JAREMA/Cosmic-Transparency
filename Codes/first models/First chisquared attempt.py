@@ -24,7 +24,7 @@ OL = 0.77
 
 # set up the model axis
 Om = np.linspace(0, 1, 200)
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
