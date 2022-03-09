@@ -79,12 +79,12 @@ ax3.set_ylabel(r'$relative \ error\  [\%] $', fontsize=16)
 # Calculate the model for a rnage of accuracies in z10, saving a few chosen dL
 
 # set up needed arrays
-z = np.linspace(np.min(df['z']), 20, 100)  # defining 100
+z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 # set up an array of accuracies and empty lists to store 5 smapled dL
-accuracy = np.arange(100, 1000, 100)
+accuracy = np.arange(5, 100, 5)
 dL_sampled = np.empty((4, len(accuracy)))
 z_i = [2, 32, 67, 77]  # indexes of z at which we save dL
 num = len(z_i)

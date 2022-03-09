@@ -82,8 +82,7 @@ z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
-z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = np.array((np.linspace(0, len(z10)-1, len(z10)).astype(int))) +1
+z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis
 
 # develop models for each Om, get it's theoretical M and chi^2
 i = 0
@@ -92,8 +91,10 @@ models_mu = np.zeros((len(df['z']), len(Om)))
 
 while i < len(Om):
     # model from list comprehension
-    dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
-    dl_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl_sum
+    # model from list comprehension
+    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+    dl_sum = np.sum(combs, axis = 1)
+    dl_model = (c/H0)*(1+z)*z/1000 * dl_sum
     
     #dl_model[0] = dl_model[1] - (dl_model[2] - dl_model[1])
     

@@ -223,3 +223,53 @@ contour_likelihood = ax4.contour(Hgrid/1000, Omgrid, likelihood, heights, cmap=c
 
 heatmap = ax4.pcolormesh(Hgrid/1000, Omgrid, likelihood)
 fig4.colorbar(heatmap)
+
+# %%
+
+# Mrginalised over Om with full range for H0 constraint, check
+
+# Read in generated array for chi^2
+chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_array_init = np.array(chisq_df)
+chisq_array = chisq_array_init[:, 1:]
+
+# set up the model axis
+H0 = np.linspace(70, 76, 300)*10**3
+Om = np.linspace(0, 1, 300)
+z = np.linspace(np.min(df['z']), 1.8, 100)
+c = 3 * 10**8  # light speed
+
+# finding minimum of chisquared coords
+chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
+index = np.unravel_index(np.argmin(chisq_array, axis=None), chisq_array.shape)
+min_Om = Om[index[0]]
+min_H0 = H0[index[1]]
+
+# switch to likelihoods
+likelihood = np.exp((-chisq_array**2)/2)
+
+# marginalising over H0 - with flat prior:
+lik_margin = np.sum(likelihood, axis=0)
+
+# normalise to sum=1
+lik_margin /= np.sum(lik_margin)
+
+# set up figure + visuals and plot it:
+fig5 = plt.figure()
+ax5 = fig5.gca()
+ax5.set_ylabel(r'$Likelihood \ marginalised \ over \ \Omega_{m} \ L(H_{0})$', fontsize=16)
+ax5.set_xlabel(r'$H_{0} \ [km^{-1}Mpc^{s-1}]$', fontsize=16)
+ax5.plot(H0/1000, lik_margin)
+
+# find peak value and where 68.3% of it lies for 1 \sigma error
+H0_found = H0[np.where(lik_margin == np.max(lik_margin))[0]]
+
+variables = st.rv_discrete(values=(H0, lik_margin))
+confidence1 = variables.interval(0.683)[1] - H0_found
+confidence2 = H0_found - variables.interval(0.683)[0]
+
+print(f'Om = {round(H0_found[0], 5)}')
+print('\n')
+print(f'with confidence: \n')
+print(f'                +{round(confidence1[0], 6)}')
+print(f'                -{round(confidence2[0], 6)}')
