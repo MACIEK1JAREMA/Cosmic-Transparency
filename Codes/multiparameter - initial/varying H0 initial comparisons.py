@@ -109,8 +109,8 @@ Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
-z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = np.array(np.linspace(0, len(z10)-1, len(z10)).astype(int)) + 1
+z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis
+
 
 # ############################################################################
 # complete the model for LCDM H0
@@ -121,8 +121,9 @@ chisq_array_LCDM = np.array([])
 
 while i < len(Om):
     # model from list comprehension
-    dl1_sum = [(c/H0_lambdacdm) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0_lambdacdm)*(1+z)*z/1000 * dl1_sum
     # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25
     
@@ -160,8 +161,10 @@ indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i))))
 confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2)
 
 # develop the model on this found Om
-dl1_sum = [(c/H0_lambdacdm) * np.sum(1/np.sqrt(min_Om_LCDM*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - min_Om_LCDM + 1)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+
+combs = [1/np.sqrt(min_Om_LCDM*(1+z1000[:,j])**3 - min_Om_LCDM + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0_lambdacdm)*(1+z)*z/1000 * dl1_sum
 
 # plot it on the data and chi^2 against Omega_m for it
 ax1.plot(z, dl1_model, 'b-', label=rf'$H_0 \ = \ 67 \ km \ s^{-1} \ Mpc^{-1} \ Model \ with \ \Omega_m \ = \ {round(min_Om_LCDM, 4)}$')
@@ -183,9 +186,9 @@ chisq_array_SHOES = np.array([])
 
 while i < len(Om):
     # model from list comprehension
-    dl1_sum = [(c/H0_SHOES) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
-    # convert to mu vs z to compare to data.
+    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0_SHOES)*(1+z)*z/1000 * dl1_sum
     dl1mu_model = 5*np.log10(dl1_model) + 25
     
     # interpolate the values in the grid as they are generated
@@ -222,9 +225,10 @@ indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i))))
 confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2, labels=False)
 
 # develop the model on this found Om
-dl1_sum = [(c/H0_lambdacdm) * np.sum(1/np.sqrt(min_Om_SHOES*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - min_Om_SHOES + 1)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
 
+combs = [1/np.sqrt(min_Om_SHOES*(1+z1000[:,j])**3 - min_Om_SHOES + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0_SHOES)*(1+z)*z/1000 * dl1_sum
 # plot chi^2 against Omega_m
 ax1.plot(z, dl1_model, 'r-', label=rf'$H_0 \ = \ 73 \ km \ s^{-1} \ Mpc^{-1} \ Model \ with \ \Omega_m \ = \ {round(min_Om_SHOES, 4)}$')
 ax2.plot(Om_SHOES, chisq_array_SHOES, 'r-', label = '$H_0 \ = \ 73 \ km \ s^{-1} \ Mpc^{-1}$')
@@ -245,8 +249,9 @@ chisq_array_mean = np.array([])
 
 while i < len(Om):
     # model from list comprehension
-    dl1_sum = [(c/H0_mean) * np.sum(1/np.sqrt(Om[i]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[i] + 1)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0_mean)*(1+z)*z/1000 * dl1_sum
     # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25
     
@@ -285,8 +290,9 @@ confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2, labels=False)
 
 
 # develop the model on this found Om
-dl1_sum = [(c/H0_mean) * np.sum(1/np.sqrt(min_Om_mean*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - min_Om_mean + 1)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+combs = [1/np.sqrt(min_Om_mean*(1+z1000[:,j])**3 - min_Om_mean + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0_mean)*(1+z)*z/1000 * dl1_sum
 
 # plot chi^2 against Omega_m
 ax1.plot(z, dl1_model, 'k-', label=rf'$H_0 \ = \ 70 \ km \ s^{-1} \ Mpc^{-1} \ Model \ with \ \Omega_m \ = \ {round(min_Om_mean, 4)}$')

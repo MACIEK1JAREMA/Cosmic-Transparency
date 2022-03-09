@@ -34,8 +34,8 @@ z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
-z10 = np.linspace(0, 1.8, 1000)  # inetrgal approximation axis
-count10 = np.linspace(0, len(z10)-1, len(z10)).astype(int)+1
+z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis
+
 
 i = 0
 k = 0
@@ -45,8 +45,9 @@ while i < len(H0):
     k = 0
     while k < len(Om):
         # model from list comprehension
-        dl1_sum = [(c/H0[i]) * np.sum(1/np.sqrt(Om[k]*(1 + z10[:int(len(z10)/len(z))*j + 1])**3 - Om[k] + 1)) for j in count[:]]
-        dl1_model = (1+z)*z/(count10[::int(len(z10)/len(z))]) * dl1_sum
+        combs = [1/np.sqrt(Om[k]*(1+z1000[:,j])**3 - Om[k] + 1) for j in count[:]]
+        dl1_sum = np.sum(combs, axis = 1)
+        dl1_model = (c/H0[i])*(1+z)*z/1000 * dl1_sum
         # convert to mu vs z to compare to data.
         dl1mu_model = 5*np.log10(dl1_model) + 25
         
@@ -70,7 +71,7 @@ print(f'time to run: {round(end_t - start_t, 5)} s')
 dataframe = pd.DataFrame(chisq_array)
 
 # writing to Excel
-datatoexcel = pd.ExcelWriter('(60-80) redone.xlsx')
+datatoexcel = pd.ExcelWriter('(60-80) redone2.xlsx')
   
 # write DataFrame to excel
 dataframe.to_excel(datatoexcel)

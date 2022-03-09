@@ -60,7 +60,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(60-80).xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -130,7 +130,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(60-80).xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -203,7 +203,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(60-80).xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 

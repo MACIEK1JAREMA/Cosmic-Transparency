@@ -25,13 +25,13 @@ Om = 0.23
 OL = 0.77
 
 # define the z axis
-z = np.linspace(0, 1.8, 100)
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+z = np.linspace(np.min(df['z']), 1.8, 100)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)+1
+
 #count = [int(x) for x in count]  # same thing, much slower
 
 # finding dl using list comprehension
-dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
+dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j])**3 + OL)) for j in count[:]]
 dl_model = (1+z)*z/(count) * dl_sum
 
 # set up figure and plot
@@ -39,6 +39,7 @@ fig1 = plt.figure()
 ax1 = fig1.gca()
 ax1.set_xlabel(r'$Redshift \ z$', fontsize=16)
 ax1.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
+plt.title("Basic calculation")
 plt.plot(z, dl_model)
 
 # %%
@@ -58,16 +59,17 @@ Om = 0.23
 OL = 0.77
 
 # axis
-z = np.linspace(0, 1.8, 100)  # defining 100
+z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
-z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
+z1000 = np.linspace(0, z, 1000)  # using 1000 point for sum
+
+
 
 # model from list comprehension again
-dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
-
+combs = [1/np.sqrt(Om*(1+z1000[:,j])**3 - Om + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
 # set up figure and plot
 fig1 = plt.figure()
 ax1 = fig1.gca()
@@ -113,22 +115,22 @@ ax.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
 # Calculate models:
 
 # set up axis
-z = np.linspace(0, 1.8, 100)  # defining 100
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
+count = np.linspace(0, len(z)-1, len(z)).astype(int)+1
+
 
 # Less accurate:
-z = np.linspace(0, 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+
 dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
 dl_model = (1+z)*z/(count) * dl_sum
 
 # more accurate
-z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
-dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
+z1000 = np.linspace(0, z, 1000)  # using 1000 point for sum
+combs = [1/np.sqrt(Om*(1+z1000[:,j])**3 - Om + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
 
 # plot above models, with a legend:
 ax.plot(z, dl_model, 'r-', label='approximate')
@@ -169,18 +171,17 @@ count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 # Less accurate:
-z = np.linspace(0, 1.8, 100)
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+
 dl_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z[:j+1])**3 + OL)) for j in count[:]]
 dl_model = (1+z)*z/(count) * dl_sum
 dlmu_model = 5*np.log10(dl_model) + 25
 
 # more accurate
-z10 = np.linspace(0, 1.8, 1000)  # using 1000 point for sum
-count10 = list(np.linspace(0, len(z10)-1, len(z10)).astype(int))
-dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:10*j + 1])**3 + OL)) for j in count[:]]
-dl1_model = (1+z)*z/(count10[::10]) * dl1_sum
+
+z1000 = np.linspace(0, z, 1000)  # using 1000 point for sum
+combs = [1/np.sqrt(Om*(1+z1000[:,j])**3 - Om + 1) for j in count[:]]
+dl1_sum = np.sum(combs, axis = 1)
+dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
 dl1mu_model = 5*np.log10(dl1_model) + 25
 
 # plot above models, with a legend:

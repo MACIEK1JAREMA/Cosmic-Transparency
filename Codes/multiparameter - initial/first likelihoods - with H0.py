@@ -19,7 +19,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(60-80) redone.xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -36,7 +36,7 @@ chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
 index = np.unravel_index(np.argmin(chisq_array, axis=None), chisq_array.shape)
 min_Om = Om[index[0]]
 min_H0 = H0[index[1]]
-
+print(min_Om, min_H0)
 # set up plotting axis
 Hgrid, Omgrid = np.meshgrid(H0, Om)
 
@@ -49,10 +49,10 @@ ax1.plot(min_H0/1000, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
 heatmap = ax1.pcolormesh(Hgrid/1000, Omgrid, chisq_array)
-contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.linspace(0, 1000, 11), cmap=cm.jet)
+contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.linspace(0, 100, 11), cmap=cm.jet)
 ax1.clabel(contourplot)
 fig1.colorbar(heatmap)
-
+#%%
 # set up figure and plot a surface plot to observe the shape of chisquared
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
@@ -71,7 +71,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(70-76) redone.xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -79,7 +79,7 @@ chisq_array = chisq_array_init[:, 1:]
 c = 3 * 10**8
 
 # set up the model axis
-H0 = np.linspace(70, 76, 300)*10**3
+H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 100)
 
@@ -106,9 +106,9 @@ ax4.clabel(contour_likelihood)
 # plot in 3D, but restrict range:
 fig3 = plt.figure()
 ax3 = fig3.gca(projection='3d')
-ax3.set_ylim(0.2, 0.3)
-Hgrid, Omgrid = np.meshgrid(H0, Om[60:90])
-likelihood = likelihood[60:90, :]
+#ax3.set_ylim(0.2, 0.3)
+Hgrid, Omgrid = np.meshgrid(H0, Om[60:150])
+likelihood = likelihood[60:150, :]
 surf = ax3.plot_surface(Hgrid/1000, Omgrid, likelihood, cmap=cm.jet)
 ax3.set_ylabel('$\Omega_{m} $', fontsize=16)
 ax3.set_xlabel('$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=16)
@@ -173,7 +173,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -181,7 +181,7 @@ chisq_array = chisq_array_init[:, 1:]
 c = 3 * 10**8
 
 # set up the model axis
-H0 = np.linspace(70, 76, 300)*10**3
+H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 100)
 

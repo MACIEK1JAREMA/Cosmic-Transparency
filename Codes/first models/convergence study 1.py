@@ -32,21 +32,23 @@ ax.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
 
 # set up needed arrays
 z = np.linspace(np.min(df['z']), 1.8, 100) # defining 100
-count = np.linspace(0, len(z)-1, len(z)).astype(int) + 1
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 # set up an array of accuracies to use:
-accuracy = np.arange(100, 2001, 100)
+accuracy = np.arange(10, 100, 10)
 
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
-    z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = np.linspace(0, accu-1, accu).astype(int) +1
-    dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
+    z10 = np.linspace(0, z, accu)  # using 1000 point for sum
+    
+    combs = [1/np.sqrt(Om*(1+z10[:,j])**3 - Om + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0)*(1+z)*z/len(z10) * dl1_sum
 
     # plot above models, with a legend:
     ax.plot(z, dl1_model, label=f'{accu} points in sum')
+    
     ax.legend()
 
 # %%
@@ -77,7 +79,7 @@ ax3.set_ylabel(r'$relative \ error\  [\%] $', fontsize=16)
 # Calculate the model for a rnage of accuracies in z10, saving a few chosen dL
 
 # set up needed arrays
-z = np.linspace(np.min(df['z']), 1.8, 100)  # defining 100
+z = np.linspace(np.min(df['z']), 20, 100)  # defining 100
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
@@ -90,10 +92,11 @@ i = 0  # counting variable for indexes from accu
 
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
-    z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = np.linspace(0, accu-1, accu).astype(int)+1
-    dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
+    z10 = np.linspace(0, z, accu)  # using 1000 point for sum
+    
+    combs = [1/np.sqrt(Om*(1+z10[:,j])**3 - Om + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0)*(1+z)*z/len(z10) * dl1_sum
     # add sampled points to saving array:
     dL_sampled[:, i] = dl1_model[z_i]
     i += 1
@@ -101,6 +104,7 @@ for accu in accuracy:
 # from found dL_sampled, find percentage errors
 change = np.empty((num, len(accuracy)-1))
 for i in range(num):
+    
     change[i, :] = abs((np.diff(dL_sampled[i, :]) / dL_sampled[i, :-1])*100)
 
 
@@ -171,16 +175,17 @@ count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
 # set up an array of accuracies and empty lists to store 5 smapled dL
-accuracy = np.arange(500, 3501, 100)
+accuracy = np.arange(500, 3501, 500)
 dL_sampled = np.empty((len(accuracy)))
 i = 0  # counting variable for indexes from accu
 
 # loop over calculating the whole model for a few accuracies:
 for accu in accuracy:
-    z10 = np.linspace(0, 1.8, accu)  # using 1000 point for sum
-    count10 = np.linspace(0, accu-1, accu).astype(int)+1
-    dl1_sum = [(c/H0) * np.sum(1/np.sqrt(Om*(1+z10[:int(accu/len(z))*j + 1])**3 + OL)) for j in count[:]]
-    dl1_model = (1+z)*z/(count10[::int(accu/len(z))]) * dl1_sum
+    z10 = np.linspace(0, z, accu)  # using 1000 point for sum
+    
+    combs = [1/np.sqrt(Om*(1+z10[:,j])**3 - Om + 1) for j in count[:]]
+    dl1_sum = np.sum(combs, axis = 1)
+    dl1_model = (c/H0)*(1+z)*z/len(z10) * dl1_sum
     # save last point for this accuracy
     dL_sampled[i] = dl1_model[1]
     i += 1
