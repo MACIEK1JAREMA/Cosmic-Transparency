@@ -49,10 +49,10 @@ ax1.plot(min_H0/1000, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
 heatmap = ax1.pcolormesh(Hgrid/1000, Omgrid, chisq_array)
-contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.linspace(0, 100, 11), cmap=cm.jet)
+contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.linspace(0, 1000, 11), cmap=cm.jet)
 ax1.clabel(contourplot)
 fig1.colorbar(heatmap)
-#%%
+
 # set up figure and plot a surface plot to observe the shape of chisquared
 fig2 = plt.figure()
 ax2 = fig2.gca(projection='3d')
