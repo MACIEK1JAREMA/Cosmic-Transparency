@@ -32,6 +32,7 @@ Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
+print(np.min(chisq_array))
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
 index = np.unravel_index(np.argmin(chisq_array, axis=None), chisq_array.shape)
 min_Om = Om[index[0]]
@@ -49,7 +50,7 @@ ax1.plot(min_H0/1000, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
 heatmap = ax1.pcolormesh(Hgrid/1000, Omgrid, chisq_array)
-contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.array([1.00, 2.71, 9.00]), cmap=cm.jet)
+contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
 #ax1.clabel(contourplot)
 fig1.colorbar(heatmap)
 
