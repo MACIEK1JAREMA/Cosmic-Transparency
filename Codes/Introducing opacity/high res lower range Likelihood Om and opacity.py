@@ -29,7 +29,6 @@ c = 3 * 10**8
 # set up the model axis
 eps = np.linspace(-0.2, 0.2, 500)
 Om = np.linspace(0.1, 0.4, 500)
-z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
 print(np.min(chisq_array))
@@ -72,6 +71,9 @@ fig4.colorbar(heatmap)
 
 # marginalise over Om in likelihood
 # flat prior in Om
+
+df = pd.read_excel('data\\SNe data.xlsx')
+df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('data\\chisq with opacity and reduced range (500 points).xlsx')
