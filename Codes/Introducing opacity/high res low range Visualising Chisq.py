@@ -17,7 +17,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('chisq with opacity and reduced range (500 points).xlsx')
+chisq_df = pd.read_excel('data\\chisq with opacity and reduced range (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
