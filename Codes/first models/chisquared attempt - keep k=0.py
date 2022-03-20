@@ -67,7 +67,7 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 400)
 #z = np.linspace(0, 1.8, 100)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -80,7 +80,7 @@ chisq_array = np.array([])
 while i < len(Om):
     # model from list comprehension
     combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
-    dl1_sum = np.sum(combs, axis = 1)
+    dl1_sum = np.sum(combs, axis=1)
     dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
     # convert to mu vs z to compare to data.
     dl1mu_model = 5*np.log10(dl1_model) + 25
