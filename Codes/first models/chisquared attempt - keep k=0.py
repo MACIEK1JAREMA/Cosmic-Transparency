@@ -79,7 +79,7 @@ chisq_array = np.array([])
 
 while i < len(Om):
     # model from list comprehension
-    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+    combs = [1/np.sqrt(Om[i]*(1+z1000[:, j])**3 - Om[i] + 1) for j in count[:]]
     dl1_sum = np.sum(combs, axis=1)
     dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
     # convert to mu vs z to compare to data.
