@@ -13,7 +13,7 @@ import scipy.stats as st
 import Codes.Module as module
 
 # %%
-
+# Low z
 # #############################################################################
 # Method 1 - our integration
 # #############################################################################
@@ -57,4 +57,29 @@ ax.set_ylabel(r'$d_L \ [Mpc]$', fontsize=20)
 ax.plot(z, dl_model, label=r'$Approximate \ inetrgal \ model \ with \ \Omega_{m}=0.2$')
 
 ax.legend(fontsize=18)
+#%%
+# High z
 
+# define constants
+H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
+c = 3 * 10**8
+
+# set up the model axis
+Om = 0.23
+z = np.linspace(0, 10000, 400)
+count = np.linspace(0, len(z)-1, len(z)).astype(int)
+count = list(count)
+z1000 = np.linspace(0, z, 100000)  # inetrgal approximation axis
+
+
+# model from list comprehension
+combs = [1/np.sqrt(Om*(1+z1000[:,j])**3 - Om + 1) for j in count[:]]
+dl_sum = np.sum(combs, axis=1)
+dl_model = z/100000 * dl_sum
+
+# plot the model
+fig = plt.figure()
+ax = fig.gca()
+ax.set_xlabel(r'$z$', fontsize=20)
+ax.set_ylabel(r'$d_L \ [Mpc]$', fontsize=20)
+ax.plot(z, dl_model, label=r'$Riemann \ summation \ Model \ with \ \Omega_{m}=0.2$')
