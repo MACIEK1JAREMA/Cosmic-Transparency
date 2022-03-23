@@ -21,8 +21,8 @@ H0 = 70*10**3
 c = 3 * 10**8
 
 # set up the model axis
-OL = np.linspace(0.5, 0.9, 300)
-Om = np.linspace(0.1, 0.5, 300)
+OL = np.linspace(0.2, 1.1, 500)
+Om = np.linspace(0, 0.6, 500)
 z = np.linspace(np.min(df['z']), 1.8, 300)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -45,7 +45,7 @@ while i < len(Om):
         
         # get the integration evaulated, this is part of the arg to sin/sinh
         # so same for each case
-        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, j])**3 + sqOk[i]**2 * (1+z10[:, j])**2 + OL[j]) for j in count[:]]
+        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + sqOk[i]**2*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
         dl_sum = np.sum(int_arg, axis=1)
         
         # develop dL from integrated expression, depeding on curvature.
@@ -75,6 +75,9 @@ while i < len(Om):
     print(f'Completed i={i} out of {len(Om)}')
     i += 1
 
+# %%
+
+# plotting found chi^2
 
 # set up figure and visuals for chi^2 plot
 fig = plt.figure()
@@ -83,9 +86,10 @@ ax.set_xlabel(r'$\Omega_{m}$', fontsize=16)
 ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=16)
 
 # plot chi^2 as heatmap and then add contours
-Omgrid, OLgird = np.meshgrid(Om, OL)
-heatmap = ax.pcolormesh(Omgrid, OLgird, chisq_array)
-contourplot = ax.contour(Omgrid, OLgird, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
+chisq_array -= np.min(chisq_array)
+Omgrid, OLgrid = np.meshgrid(Om, OL)
+heatmap = ax.pcolormesh(OLgrid, Omgrid, chisq_array)
+contourplot = ax.contour(OLgrid, Omgrid, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
 #ax1.clabel(contourplot)
 fig.colorbar(heatmap)
 
@@ -100,9 +104,11 @@ print(f'Minimum Om is: {min_Om}')
 print('\n')
 print(f'Minimum OL is: {min_OL}')
 
+
 # %%
 
-# to save results: (make sure to change names each time it's run)
+# saving results
+'''(make sure to change names each time it's run)'''
 
 dataframe = pd.DataFrame(chisq_array)
 
