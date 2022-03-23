@@ -41,11 +41,11 @@ while i < len(Om):
         # form
         
         # for current Om and OL find the array (with z) of Ok
-        sqOk = np.sqrt(abs(1-Om[i]-OL[j])/(1+z)**2)
+        sqOk = np.sqrt(abs(1-Om[i]-OL[j]))
         
         # get the integration evaulated, this is part of the arg to sin/sinh
         # so same for each case
-        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + sqOk[i]**2*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
+        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + sqOk**2*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
         dl_sum = np.sum(int_arg, axis=1)
         
         # develop dL from integrated expression, depeding on curvature.
@@ -88,8 +88,8 @@ ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=16)
 # plot chi^2 as heatmap and then add contours
 chisq_array -= np.min(chisq_array)
 Omgrid, OLgrid = np.meshgrid(Om, OL)
-heatmap = ax.pcolormesh(OLgrid, Omgrid, chisq_array)
-contourplot = ax.contour(OLgrid, Omgrid, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
+heatmap = ax.pcolormesh(Omgrid, OLgrid, chisq_array.transpose())
+contourplot = ax.contour(Omgrid, OLgrid, chisq_array.transpose(), np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
 #ax1.clabel(contourplot)
 fig.colorbar(heatmap)
 

@@ -40,21 +40,23 @@ while i < len(Om):
     # form:
     
     # for current Om and OL find the array (with z) of Ok
-    sqOk = np.sqrt(abs(1-Om[i]-OL)/(1+z)**2)
+    sqOk = np.sqrt(abs(1-Om[i]-OL))
     
     # get the integration evaulated, this is part of the arg to sin/sinh
     # so same for each case
-    int_arg = [1/np.sqrt(Om[i]*(1+z10[:, j])**3 + sqOk[i]**2 * (1+z10[:, j])**2 + OL) for j in count[:]]
+    int_arg = [1/np.sqrt(Om[i]*(1+z10[:, j])**3 + sqOk**2 * (1+z10[:, j])**2 + OL) for j in count[:]]
     dl1_sum = np.sum(int_arg, axis=1)
+    integral = dl1_sum*z/1000
     
     # develop dL from integrated expression, depeding on curvature.
     if Om[i] + OL == 1:
-        dl1_model = (c/H0) * (1+z)*z/1000 * dl1_sum
-    elif (Om[i] + OL) < 1:
-        dl1_model = (c/H0) * (1+z) / sqOk * np.sin(sqOk*dl1_sum*z/1000)
+        dl1_model = (c/H0)*(1+z) * integral
+    elif Om[i] + OL < 1:
+        dl1_model = (c/H0)*(1+z) / sqOk * np.sin(sqOk*integral)
+    elif Om[i] + OL > 1:
+        dl1_model = (c/H0)*(1+z) / sqOk * np.sinh(sqOk*integral)
     else:
-        dl1_model = (1+z) / sqOk * (c/H0) * np.sinh(sqOk*dl1_sum*z/1000)
-    
+        raise ValueError('Somehow curvature density is not a real number')
     
     # interpolate the values in the grid as they are generated
     interp = np.interp(df['z'], z, dl1_model)
@@ -162,8 +164,10 @@ ax.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
 
 # Calculate models:
 
+# WRONG, needs to include checkking for curvature regime before model is developed
+
 # set up axis
-z = np.linspace(0, 1.8, 100)  # for model
+z = np.linspace(0, 1.8, 300)  # for model
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 z10 = np.linspace(0, 1.8, 1000)  # for integral approximation
