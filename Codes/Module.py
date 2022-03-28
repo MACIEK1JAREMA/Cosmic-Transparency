@@ -55,7 +55,7 @@ def integrate2D(F, xg, yg, indx_1x=0, indx_2x=-1, indx_1y=0, indx_2y=-1, interp=
     return result
 
 
-def confidence(F, xg, yg, accu, interp, interp_kind='linear'):
+def confidence(F, xg, yg, accu, interp=0, interp_kind='linear'):
     '''
     Find heights corresponding to confidence levels of a 2D function:
     
