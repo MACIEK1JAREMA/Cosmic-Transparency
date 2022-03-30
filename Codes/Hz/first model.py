@@ -49,6 +49,42 @@ while i < len(Om):
 end = time.perf_counter()
 print(f'time to run: {end - start}')
 
+
+# get minimum value for Om and chi^2
+index = chisq_array.argmin()
+min_Om = Om[index]
+min_chisq = chisq_array[index]
+
+
+# plot chi^2 reduced to wanted range
+Delta_squared = 20
+print(f'minimum of chi^2 at : {round(np.min(chisq_array), 1)}')
+chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
+in_index = np.where(chisq_array <= Delta_squared)
+chisq_array = chisq_array[in_index]  # only keep in wanted region
+Om = Om[in_index]  # crop Om accordingly
+
+fig1 = plt.figure()
+ax1 = fig1.gca()
+ax1.tick_params(labelsize=18)
+ax1.set_xlabel(r'$\Omega_{m} $', fontsize=20)
+ax1.set_ylabel(r'$\chi^2$', fontsize=20)
+ax1.set_ylim(0, 20)
+
+ax1.plot(Om, chisq_array)
+
+reg1, reg2 = module.chi_confidence1D(chisq_array, Om, ax1)  # plot confidence regions
+
+# print confidences to user to user:
+print('\n')
+print(f'minimising \chi^2 gives a matter density = {round(min_Om, 4)}')
+print('1-sigma error =')
+print(f'               + {np.round(reg2, 5)}')
+print(f'               - {np.round(reg1, 5)}')
+print('\n')
+
+
+
 # %%
 
 # Same, Semi Vectorised

@@ -52,9 +52,11 @@ while i < len(Om):
         if Om[i] + OL[j] == 1:
             dl_model = (c/H0) * (1+z)*z/1000 * dl_sum
         elif (Om[i] + OL[j]) < 1:
-            dl_model = (c/H0) * (1+z) / sqOk * np.sin(sqOk*dl_sum*z/1000)
+            dl_model = ((c/H0)*(1+z) / sqOk)* np.sinh(sqOk*dl_sum*z/1000)
+        elif (Om[i] + OL[j]) > 1:
+            dl_model = ((c/H0)*(1+z) / sqOk)* np.sin(sqOk*dl_sum*z/1000)
         else:
-            dl_model = (1+z) / sqOk * (c/H0) * np.sinh(sqOk*dl_sum*z/1000)
+            raise ValueError('Complex densities reached (?)')
         
         # interpolate the values to match data size
         dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
@@ -82,8 +84,9 @@ while i < len(Om):
 # set up figure and visuals for chi^2 plot
 fig = plt.figure()
 ax = fig.gca()
-ax.set_xlabel(r'$\Omega_{m}$', fontsize=16)
-ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=16)
+ax.tick_params(labelsize=16)
+ax.set_xlabel(r'$\Omega_{m}$', fontsize=18)
+ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=18)
 
 # plot chi^2 as heatmap and then add contours
 chisq_array -= np.min(chisq_array)
@@ -91,8 +94,8 @@ Omgrid, OLgrid = np.meshgrid(Om, OL)
 heatmap = ax.pcolormesh(Omgrid, OLgrid, chisq_array.transpose())
 contourplot = ax.contour(Omgrid, OLgrid, chisq_array.transpose(), np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
 #ax1.clabel(contourplot)
-fig.colorbar(heatmap)
-
+cbar = fig.colorbar(heatmap)
+cbar.ax.tick_params(labelsize=16)
 
 # get minimum value for Om and chi^2
 print(np.min(chisq_array))
@@ -113,7 +116,7 @@ print(f'Minimum OL is: {min_OL}')
 dataframe = pd.DataFrame(chisq_array)
 
 # writing to Excel
-datatoexcel = pd.ExcelWriter('gen curvature chi^2 (300, 300).xlsx')
+datatoexcel = pd.ExcelWriter('gen curvature wrong chi^2 (500, 500).xlsx')
 
 # write DataFrame to excel
 dataframe.to_excel(datatoexcel)
