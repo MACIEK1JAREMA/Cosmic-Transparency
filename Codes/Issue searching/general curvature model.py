@@ -21,8 +21,8 @@ H0 = 70*10**3
 c = 3 * 10**8
 
 # set up the model axis
-OL = np.linspace(0.2, 1.1, 500)
-Om = np.linspace(0, 0.6, 500)
+OL = np.linspace(0, 1.4, 50)
+Om = np.linspace(0, 1, 50)
 z = np.linspace(np.min(df['z']), 1.8, 300)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -41,22 +41,21 @@ while i < len(Om):
         # form
         
         # for current Om and OL find the array (with z) of Ok
-        sqOk = np.sqrt(abs(1-Om[i]-OL[j]))
+        Ok = 1-Om[i]-OL[j]
+        sqOk = np.sqrt(abs(Ok))
         
         # get the integration evaulated, this is part of the arg to sin/sinh
         # so same for each case
-        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + sqOk**2*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
+        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + Ok*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
         dl_sum = np.sum(int_arg, axis=1)
         
         # develop dL from integrated expression, depeding on curvature.
-        if Om[i] + OL[j] == 1:
-            dl_model = (c/H0) * (1+z)*z/1000 * dl_sum
-        elif (Om[i] + OL[j]) < 1:
+        if Ok == 0:
+            dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum
+        elif Ok > 0:
             dl_model = ((c/H0)*(1+z) / sqOk)* np.sinh(sqOk*dl_sum*z/1000)
-        elif (Om[i] + OL[j]) > 1:
+        elif Ok < 0:
             dl_model = ((c/H0)*(1+z) / sqOk)* np.sin(sqOk*dl_sum*z/1000)
-        else:
-            raise ValueError('Complex densities reached (?)')
         
         # interpolate the values to match data size
         dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
@@ -88,14 +87,12 @@ ax.tick_params(labelsize=16)
 ax.set_xlabel(r'$\Omega_{m}$', fontsize=18)
 ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=18)
 
-# plot chi^2 as heatmap and then add contours
+# reduce it to wanted range
 chisq_array -= np.min(chisq_array)
+
+# plot chi^2 as contour plot
 Omgrid, OLgrid = np.meshgrid(Om, OL)
-heatmap = ax.pcolormesh(Omgrid, OLgrid, chisq_array.transpose())
 contourplot = ax.contour(Omgrid, OLgrid, chisq_array.transpose(), np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
-#ax1.clabel(contourplot)
-cbar = fig.colorbar(heatmap)
-cbar.ax.tick_params(labelsize=16)
 
 # get minimum value for Om and chi^2
 print(np.min(chisq_array))

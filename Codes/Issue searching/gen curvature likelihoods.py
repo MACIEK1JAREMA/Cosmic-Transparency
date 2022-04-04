@@ -26,8 +26,8 @@ chisq_array = chisq_array_init[:, 1:]
 c = 3 * 10**8
 
 # set up the model axis
-OL = np.linspace(0.5, 0.9, 300)
-Om = np.linspace(0.1, 0.5, 300)
+OL = np.linspace(0, 1.4, 500)
+Om = np.linspace(0, 1, 500)
 
 # set up plotting axis
 Omgrid, OLgrid = np.meshgrid(Om, OL)
