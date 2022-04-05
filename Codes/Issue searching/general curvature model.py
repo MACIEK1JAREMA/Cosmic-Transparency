@@ -56,9 +56,9 @@ while i < len(Om):
         if Ok == 0:
             dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum
         elif Ok > 0:
-            dl_model = ((c/H0)*(1+z) / sqOk)* np.sin(sqOk*dl_sum*z/1000)
-        elif Ok < 0:
             dl_model = ((c/H0)*(1+z) / sqOk)* np.sinh(sqOk*dl_sum*z/1000)
+        elif Ok < 0:
+            dl_model = ((c/H0)*(1+z) / sqOk)* np.sin(sqOk*dl_sum*z/1000)
         
         # interpolate the values to match data size
         dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
