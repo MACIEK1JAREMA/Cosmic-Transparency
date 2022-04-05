@@ -9,8 +9,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import Codes.Module as module
 import matplotlib.cm as cm
+import time
 
 # %%
+
+start = time.perf_counter()
 
 # Read in data as pandas dataframe
 df = pd.read_excel('data\\SNe data.xlsx')
@@ -46,16 +49,16 @@ while i < len(Om):
         
         # get the integration evaulated, this is part of the arg to sin/sinh
         # so same for each case
-        int_arg = [1/np.sqrt(Om[i]*(1+z10[:, k])**3 + Ok*(1+z10[:, k])**2 + OL[j]) for k in count[:]]
-        dl_sum = np.sum(int_arg, axis=1)
+        int_arg = 1/np.sqrt(Om[i]*(1+z10)**3 + Ok*(1+z10)**2 + OL[j])
+        dl_sum = np.sum(int_arg, axis=0)
         
         # develop dL from integrated expression, depeding on curvature.
         if Ok == 0:
             dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum
         elif Ok > 0:
-            dl_model = ((c/H0)*(1+z) / sqOk)* np.sinh(sqOk*dl_sum*z/1000)
-        elif Ok < 0:
             dl_model = ((c/H0)*(1+z) / sqOk)* np.sin(sqOk*dl_sum*z/1000)
+        elif Ok < 0:
+            dl_model = ((c/H0)*(1+z) / sqOk)* np.sinh(sqOk*dl_sum*z/1000)
         
         # interpolate the values to match data size
         dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
@@ -75,6 +78,9 @@ while i < len(Om):
     
     print(f'Completed i={i} out of {len(Om)}')
     i += 1
+
+end = time.perf_counter()
+print(f'time to run: {end - start}')
 
 # %%
 
