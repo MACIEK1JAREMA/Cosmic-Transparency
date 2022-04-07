@@ -24,13 +24,13 @@ import Codes.Module as module
 # ############################################################################
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\chisq with opacity and reduced range (500 points).xlsx')
+chisq_df = pd.read_excel('data\\Final datasets\\chisq with opacity corrected (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
 # set up the model axis
-eps = np.linspace(-0.2, 0.2, 500)
-Om = np.linspace(0.1, 0.4, 500)
+eps = np.linspace(-0.3, 0.3, 500)
+Om = np.linspace(0, 0.6, 500)
 
 # finding minimum of chisquared coords
 print(np.min(chisq_array))
@@ -114,13 +114,13 @@ Multiplying likelihoods together for overall constraint
 # ############################################################################
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\chisq with opacity and reduced range (500 points).xlsx')
+chisq_df = pd.read_excel('data\\Final datasets\\chisq with opacity corrected (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
 # set up the model axis
-eps = np.linspace(-0.2, 0.2, 500)
-Om = np.linspace(0.1, 0.4, 500)
+eps = np.linspace(-0.3, 0.3, 500)
+Om = np.linspace(0, 0.6, 500)
 
 # finding minimum of chisquared coords
 print(np.min(chisq_array))
