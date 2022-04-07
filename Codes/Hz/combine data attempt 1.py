@@ -197,7 +197,7 @@ NOTE --- only run once cell above has been run
 '''
 
 # marginalising over Om - with flat prior:
-lik_margin = np.sum(likelihood_all, axis=1)
+lik_margin = np.sum(likelihood_all, axis=0)
 
 # normalise to sum=1 for scip rvdiscrete.
 lik_margin /= np.sum(lik_margin)
