@@ -9,4 +9,4 @@ The codes throughout the project have been kept. Completed codes that produce ou
 This work formed part of Bachelors Physics Project for creators: Maciej Tomasz Jarema and Addam Smith. Thus, project reports are also avaliable.
 
 
-
+To run the codes. Set your working directory to the location of this Repo.
