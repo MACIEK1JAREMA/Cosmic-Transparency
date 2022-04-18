@@ -186,7 +186,7 @@ def chi_confidence1D(y, x, axis, colors=['r', 'g', 'b'], labels=True, interp=100
         axis.axvline(xs[2*i+1], ymin=0, ymax=(ys[2*i+1]-axis.get_ybound()[0])/axis.get_ybound()[1], color=colors[i], ls='-.')
         
     if labels:
-        axis.legend()
+        axis.legend(fontsize=16)
     else:
         pass
     

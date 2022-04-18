@@ -1,6 +1,3 @@
-'''
-We take a first look at likelihood functions, defining a 1D L, with Om only
-'''
 
 import numpy as np
 import pandas as pd
@@ -22,7 +19,7 @@ c = 3 * 10**8
 
 # set up the model axis
 Om = np.linspace(0, 1, 500)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 500)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
@@ -32,15 +29,22 @@ i = 0
 chisq_array = np.array([])
 
 while i < len(Om):
-    # model from list comprehension
-    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
-    dl1_sum = np.sum(combs, axis = 1)
-    dl1_model = (c/H0)*(1+z)*z/1000 * dl1_sum
+    
+    # model for d_L
+    int_arg = 1/np.sqrt(Om[i]*(1+z1000)**3 + 1 - Om[i])  # integrand
+    dl_sum = np.sum(int_arg, axis=0)  # integral result
+    dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum  # model
+    
+#    # model from list comprehension
+#    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+#    dl_sum = np.sum(combs, axis = 1)
+#    dl_model = (c/H0)*(1+z)*z/1000 * dl_sum
+    
     # convert to mu vs z to compare to data.
-    dl1mu_model = 5*np.log10(dl1_model) + 25
+    dlmu_model = 5*np.log10(dl_model) + 25
     
     # interpolate the values in the grid as they are generated
-    interp = np.interp(df['z'], z, dl1mu_model)
+    interp = np.interp(df['z'], z, dlmu_model)
     
     # get chi^2 value for this Om and save to its array
     chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
@@ -52,6 +56,9 @@ while i < len(Om):
 index = chisq_array.argmin()
 min_Om = Om[index]
 min_chisq = chisq_array[index]
+
+
+print(f'found minimum chi^2 as: {min_chisq}')
 
 # #############################################################################
 # crop to relevant bounds and get likelihood + plot
@@ -69,15 +76,16 @@ Om = Om[in_index]  # crop Om accordingly
 # define likelihood from these:
 likelihood = np.exp((-chisq_array**2)/2)
 
-# normalise to sum=1
+# normalise to sum=1 for rv.discrete to find confidencre regions
 likelihood /= np.sum(likelihood)
 
+# plot result
 fig5 = plt.figure()
 ax5 = fig5.gca()
-ax5.set_ylabel(r'$Likelihood \  L(\Omega_{m})$', fontsize=16)
-ax5.set_xlabel(r'$\Omega_{m}$', fontsize=16)
+ax5.tick_params(labelsize=16)
+ax5.set_ylabel(r'$Likelihood \  L(\Omega_{m})$', fontsize=20)
+ax5.set_xlabel(r'$\Omega_{m}$', fontsize=20)
 ax5.plot(Om, likelihood)
-
 
 # find peak value and where 68.3% of it lies for 1 \sigma error
 Om_found = Om[np.where(likelihood == np.max(likelihood))[0]]

@@ -1,67 +1,8 @@
-'''
-Here we look at the effect that a changed value of H0 has on the end models
-we do so on the example of k=0 models with chi^2 analysis
-'''
-
 # import modules
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# function to plot confidence intervals at given indexes
-def confidence_plot(x, y, indx1, indx2, indx3, axis, colors=['r', 'g', 'b'], labels=True):
-    '''
-    Plots default confidence interval lines.
-    The inuput y axis must be chi^2, reduced to minimum at y=0.
-    
-    Prameters:
-        ---------------
-        - x - numpy.ndarray x values
-        - y - numpy.ndarray y values
-        - indx1 - index of intersection with line at 1 sigma
-        - indx2 - index of intersection with line at 2 sigma
-        - indx3 - index of intersection with line at 3 sigma
-        - ax - matplotlib axis to plot on
-        - colors - colours to use for lines at the 3 intervals, in order
-                   default = ['r', 'g', 'b']
-        - labels - bool - default = True, defines if legend is to draw
-    Returns:
-        None, plots on given axis
-    '''
-    global ys
-    
-    # get values of intersections
-    x1 = x[indx1]
-    y1 = y[indx1]
-    x2 = x[indx2]
-    y2 = y[indx2]
-    x3 = x[indx3]
-    y3 = y[indx3]
-    
-    # plot horizontally
-    if labels:
-        axis.plot(x1, y1, color='r', ls='-.', label=r'$1 \sigma$')
-        axis.plot(x2, y2, color='g', ls='-.', label=r'$2 \sigma$')
-        axis.plot(x3, y3, color='b', ls='-.', label=r'$3 \sigma$')
-    else:
-        axis.plot(x1, y1, color='r', ls='-.')
-        axis.plot(x2, y2, color='g', ls='-.')
-        axis.plot(x3, y3, color='b', ls='-.')
-    
-    # organise intersections into a list for loop
-    xs = [x1[0], x1[1], x2[0], x2[1], x3[0], x3[1]]
-    ys = [y1[0], y1[1], y2[0], y2[1], y3[0], y3[1]]
-    
-    # loop over plotting each vertical line
-    for i in range(3):
-        axis.axvline(xs[2*i], ymin=0, ymax=(ys[2*i]-axis.get_ybound()[0])/axis.get_ybound()[1], color=colors[i], ls='-.')
-        axis.axvline(xs[2*i+1], ymin=0, ymax=(ys[2*i+1]-axis.get_ybound()[0])/axis.get_ybound()[1], color=colors[i], ls='-.')
-        
-    if labels:
-        axis.legend()
-    else:
-        pass
-
+import Codes.Module as module
 
 # %%
 
@@ -76,8 +17,7 @@ Delta_squared = 20
 
 # Read in data as pandas dataframe
 df = pd.read_excel('data\\SNe data.xlsx')
-# sort it in increasing z:
-df = df.sort_values('z')
+df = df.sort_values('z')  # sort it in increasing z:
 
 # convert the mu data to d_L, make it a new column and sort w.r.t it
 df_dL = 10**(0.2*df['mu'] - 5)
@@ -91,8 +31,9 @@ df.insert(5, 'ddL Mpc', ddL)
 # Set up the plot for the model and data + visuals
 fig1 = plt.figure()
 ax1 = fig1.gca()
-ax1.set_xlabel(r'$Redshift \ z$', fontsize=16)
-ax1.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=16)
+ax1.tick_params(labelsize=16)
+ax1.set_xlabel(r'$Redshift \ z$', fontsize=20)
+ax1.set_ylabel(r'$Luminosity \ Distance  \ d_{L} \  [Mpc]$', fontsize=20)
 # plot data
 ax1.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
@@ -100,8 +41,9 @@ ax1.errorbar(df['z'], df['dL Mpc'], yerr=df['ddL Mpc'],
 # Set up a plot for chi^2 analysis + visuals
 fig2 = plt.figure()
 ax2 = fig2.gca()
-ax2.set_xlabel(r'$\Omega_{m} $', fontsize=16)
-ax2.set_ylabel(r'$\chi^2$', fontsize=16)
+ax2.tick_params(labelsize=16)
+ax2.set_xlabel(r'$\Omega_{m} $', fontsize=20)
+ax2.set_ylabel(r'$\chi^2$', fontsize=20)
 ax2.set_ylim(0, 20)
 
 # set up the model axis
@@ -148,20 +90,10 @@ in_index = np.where(chisq_array_LCDM <= Delta_squared)
 chisq_array_LCDM = chisq_array_LCDM[in_index]  # only keep in wanted region
 Om_LCDM = Om[in_index]  # crop Om accordingly
 
-# interpolate:
-Omi = np.linspace(0, 1, 10000)
-chi_sqr_i = np.interp(np.linspace(0, 1, 10000), Om_LCDM, chisq_array_LCDM)
-
-# get intercept indexes
-indx1 = np.argwhere(np.diff(np.sign(chi_sqr_i - np.ones(np.shape(chi_sqr_i)))))
-indx2 = np.argwhere(np.diff(np.sign(chi_sqr_i - 2.71*np.ones(np.shape(chi_sqr_i)))))
-indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i)))))
-
-# plot confidence regions
-confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2)
+# plot confidence regions and get errors
+lerror_LCDM, rerror_LCDM = module.chi_confidence1D(chisq_array_LCDM, Om_LCDM, ax2)
 
 # develop the model on this found Om
-
 combs = [1/np.sqrt(min_Om_LCDM*(1+z1000[:,j])**3 - min_Om_LCDM + 1) for j in count[:]]
 dl1_sum = np.sum(combs, axis = 1)
 dl1_model = (c/H0_lambdacdm)*(1+z)*z/1000 * dl1_sum
@@ -173,8 +105,8 @@ ax2.plot(Om_LCDM, chisq_array_LCDM, 'b-', label = '$H_0 \ = \ 67 \ km \ s^{-1} \
 print(f'minimising \chi^2 for H0=67 kms-1Mpc-1 gives a matter density of {round(min_Om_LCDM, 4)}')
 print('\n')
 print('1-sigma error =')
-print(f'               + {round(Omi[indx1][1][0] - min_Om_LCDM, 5)}')
-print(f'               - {round(min_Om_LCDM - Omi[indx1][0][0], 5)}')
+print(f'               + {round(rerror_LCDM[0], 5)}')
+print(f'               - {round(lerror_LCDM[0], 5)}')
 print('\n')
 
 # ############################################################################
@@ -212,17 +144,8 @@ in_index = np.where(chisq_array_SHOES <= Delta_squared)
 chisq_array_SHOES = chisq_array_SHOES[in_index]  # only keep in wanted region
 Om_SHOES = Om[in_index]  # crop Om accordingly
 
-# interpolate:
-Omi = np.linspace(0, 1, 10000)
-chi_sqr_i = np.interp(np.linspace(0, 1, 10000), Om_SHOES, chisq_array_SHOES)
-
-# get intercept indexes
-indx1 = np.argwhere(np.diff(np.sign(chi_sqr_i - np.ones(np.shape(chi_sqr_i)))))
-indx2 = np.argwhere(np.diff(np.sign(chi_sqr_i - 2.71*np.ones(np.shape(chi_sqr_i)))))
-indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i)))))
-
 # plot confidence regions
-confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2, labels=False)
+lerror_SHOES, rerror_SHOES = module.chi_confidence1D(chisq_array_SHOES, Om_SHOES, ax2)
 
 # develop the model on this found Om
 
@@ -236,8 +159,8 @@ ax2.plot(Om_SHOES, chisq_array_SHOES, 'r-', label = '$H_0 \ = \ 73 \ km \ s^{-1}
 print(f'minimising \chi^2 for H0=73 kms-1Mpc-1 gives a matter density of {round(min_Om_SHOES, 4)}')
 print('\n')
 print('1-sigma error =')
-print(f'               + {round(Omi[indx1][1][0] - min_Om_SHOES, 5)}')
-print(f'               - {round(min_Om_SHOES - Omi[indx1][0][0], 5)}')
+print(f'               + {round(rerror_SHOES[0], 5)}')
+print(f'               - {round(lerror_SHOES[0], 5)}')
 print('\n')
 
 # ############################################################################
@@ -286,8 +209,7 @@ indx2 = np.argwhere(np.diff(np.sign(chi_sqr_i - 2.71*np.ones(np.shape(chi_sqr_i)
 indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i)))))
 
 # plot confidence regions
-confidence_plot(Omi, chi_sqr_i, indx1, indx2, indx3, ax2, labels=False)
-
+lerror_mean, rerror_mean = module.chi_confidence1D(chisq_array_mean, Om_mean, ax2)
 
 # develop the model on this found Om
 combs = [1/np.sqrt(min_Om_mean*(1+z1000[:,j])**3 - min_Om_mean + 1) for j in count[:]]
@@ -301,10 +223,9 @@ ax2.plot(Om_mean, chisq_array_mean, 'k-', label = '$H_0 \ = \ 70 \ km \ s^{-1} \
 print(f'minimising \chi^2 for H0=70 kms-1Mpc-1 gives a matter density of {round(min_Om_mean, 4)}')
 print('\n')
 print('1-sigma error =')
-print(f'               + {round(Omi[indx1][1][0] - min_Om_mean, 5)}')
-print(f'               - {round(min_Om_mean - Omi[indx1][0][0], 5)}')
+print(f'               + {round(rerror_mean[0], 5)}')
+print(f'               - {round(lerror_mean[0], 5)}')
 print('\n')
 
 # finilise plot legends
-ax2.legend(loc='upper left')
-ax1.legend()
+ax1.legend(fontsize=16)

@@ -1,7 +1,3 @@
-'''
-Here we proceed with first attempts of chi^2 analysis of the data and
-previously devleoped model, treating only Omega_{m} (Om) as a free parameter.
-'''
 
 # import modules
 import numpy as np
