@@ -48,7 +48,7 @@ ax2.set_ylim(0, 20)
 
 # set up the model axis
 Om = np.linspace(0, 1, 300)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 500)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis
@@ -145,7 +145,7 @@ chisq_array_SHOES = chisq_array_SHOES[in_index]  # only keep in wanted region
 Om_SHOES = Om[in_index]  # crop Om accordingly
 
 # plot confidence regions
-lerror_SHOES, rerror_SHOES = module.chi_confidence1D(chisq_array_SHOES, Om_SHOES, ax2)
+lerror_SHOES, rerror_SHOES = module.chi_confidence1D(chisq_array_SHOES, Om_SHOES, ax2, labels=False)
 
 # develop the model on this found Om
 
@@ -209,7 +209,7 @@ indx2 = np.argwhere(np.diff(np.sign(chi_sqr_i - 2.71*np.ones(np.shape(chi_sqr_i)
 indx3 = np.argwhere(np.diff(np.sign(chi_sqr_i - 9*np.ones(np.shape(chi_sqr_i)))))
 
 # plot confidence regions
-lerror_mean, rerror_mean = module.chi_confidence1D(chisq_array_mean, Om_mean, ax2)
+lerror_mean, rerror_mean = module.chi_confidence1D(chisq_array_mean, Om_mean, ax2, labels=False)
 
 # develop the model on this found Om
 combs = [1/np.sqrt(min_Om_mean*(1+z1000[:,j])**3 - min_Om_mean + 1) for j in count[:]]
@@ -229,3 +229,4 @@ print('\n')
 
 # finilise plot legends
 ax1.legend(fontsize=16)
+ax2.legend(fontsize=16)

@@ -1,8 +1,3 @@
-'''
-We import the generated chi^2 data from models that include varying H0 and Om
-We plot their chi^2 and likelihood function.
-Then attempt to marginalise over H0
-'''
 
 import numpy as np
 import pandas as pd
@@ -15,11 +10,11 @@ import Codes.Module as module
 # %%
 
 # Read in Sne data as pandas dataframe
-df = pd.read_excel('data\\SNe data.xlsx')
+df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -29,7 +24,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 500)
 
 # finding minimum of chisquared coords
 print(np.min(chisq_array))
@@ -44,35 +39,26 @@ Hgrid, Omgrid = np.meshgrid(H0, Om)
 # figure and visuals
 fig1 = plt.figure()
 ax1 = fig1.gca()
-ax1.set_ylabel('$\Omega_{m} $', fontsize=16)
-ax1.set_xlabel('$H_0 \ (m s^{-1} Mpc^{-1})$', fontsize=16)
+ax1.tick_params(labelsize=16)
+ax1.set_ylabel('$\Omega_{m} $', fontsize=20)
+ax1.set_xlabel('$H_0 \ (m s^{-1} Mpc^{-1})$', fontsize=20)
 ax1.plot(min_H0/1000, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
 heatmap = ax1.pcolormesh(Hgrid/1000, Omgrid, chisq_array)
 contourplot = ax1.contour(Hgrid/1000, Omgrid, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
-#ax1.clabel(contourplot)
 fig1.colorbar(heatmap)
-
-# set up figure and plot a surface plot to observe the shape of chisquared
-fig2 = plt.figure()
-ax2 = fig2.gca(projection='3d')
-ax2.set_ylabel('$\Omega_{m} $', fontsize=16)
-ax2.set_xlabel('$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=16)
-ax2.set_zlabel('$\chi^2$', fontsize=16)
-surf = ax2.plot_surface(Hgrid/1000, Omgrid, chisq_array, cmap=cm.jet)
-fig2.colorbar(surf)
 
 # %%
 
 # Likelihoods around Riessvalue
 
 # Read in Sne data as pandas dataframe
-df = pd.read_excel('data\\SNe data.xlsx')
+df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -120,7 +106,7 @@ ax3.set_zlabel('likelihood', fontsize=16)
 # Mrginalised over H0 with full range:
 
 # Read in generated array for chi^2
-chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(70-76) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -170,11 +156,11 @@ print(f'                -{round(confidence2[0], 6)}')
 # Replot contour plots with our new confidence finder
 
 # Read in Sne data as pandas dataframe
-df = pd.read_excel('data\\SNe data.xlsx')
+df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -230,7 +216,7 @@ fig4.colorbar(heatmap)
 # Mrginalised over Om with full range for H0 constraint, check
 
 # Read in generated array for chi^2
-chisq_df = pd.read_excel('data\\Chisquare_array(70-76).xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(70-76) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -280,11 +266,11 @@ print(f'                -{round(confidence2[0], 6)}')
 # plotting confidence regions on chi^2 from likelihood heights:
 
 # Read in Sne data as pandas dataframe
-df = pd.read_excel('data\\SNe data.xlsx')
+df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\(60-80) redone for accurate chisq.xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
