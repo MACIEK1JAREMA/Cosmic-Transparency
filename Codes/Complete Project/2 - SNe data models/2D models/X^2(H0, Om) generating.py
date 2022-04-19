@@ -17,7 +17,7 @@ df = df.sort_values('z')  # increasing z sort
 c = 3 * 10**8
 
 # set up the model axis
-H0 = np.linspace(60, 80, 300)*10**3
+H0 = np.linspace(70, 76, 300)*10**3
 
 Om = np.linspace(0, 1, 300)
 
@@ -37,7 +37,7 @@ while i < len(H0):
         # model for d_{L}
         combs = 1/np.sqrt(Om[k]*(1+z10)**3 - Om[k] + 1)
         dl1_sum = np.sum(combs, axis=0)
-        dl1_model = (c/H0[i])*(1+z)*z/1000 * dl1_sum
+        dl1_model = (c/H0[i])*(1+z)*z/500 * dl1_sum
         
         # convert to mu vs z to compare to data.
         dl1mu_model = 5*np.log10(dl1_model) + 25
@@ -64,7 +64,7 @@ print(f'time to run: {round(end_t - start_t, 5)} s')
 dataframe = pd.DataFrame(chisq_array)
 
 # writing to Excel
-datatoexcel = pd.ExcelWriter('(60-80) chisq(Om, H0).xlsx')
+datatoexcel = pd.ExcelWriter('(70-76) chisq(Om, H0).xlsx')
 
 # write DataFrame to excel
 dataframe.to_excel(datatoexcel)

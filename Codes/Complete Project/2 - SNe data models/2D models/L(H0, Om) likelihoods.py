@@ -41,7 +41,7 @@ fig1 = plt.figure()
 ax1 = fig1.gca()
 ax1.tick_params(labelsize=16)
 ax1.set_ylabel('$\Omega_{m} $', fontsize=20)
-ax1.set_xlabel('$H_0 \ (m s^{-1} Mpc^{-1})$', fontsize=20)
+ax1.set_xlabel('$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=20)
 ax1.plot(min_H0/1000, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
@@ -51,7 +51,7 @@ fig1.colorbar(heatmap)
 
 # %%
 
-# Likelihoods around Riessvalue
+# Likelihoods over H0 with full range
 
 # Read in Sne data as pandas dataframe
 df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
@@ -87,23 +87,14 @@ fig4 = plt.figure()
 ax4 = fig4.gca()
 ax4.set_ylabel('$\Omega_{m} $', fontsize=16)
 ax4.set_xlabel('$H_0 \ (m s^{-1} Mpc^{-1})$', fontsize=16)
+heatmap = ax4.pcolormesh(Hgrid/1000, Omgrid, likelihood)
 contour_likelihood = ax4.contour(Hgrid/1000, Omgrid, likelihood, np.linspace(0, 1, 11), cmap=cm.jet)
 ax4.clabel(contour_likelihood)
-
-# plot in 3D, but restrict range:
-fig3 = plt.figure()
-ax3 = fig3.gca(projection='3d')
-#ax3.set_ylim(0.2, 0.3)
-Hgrid, Omgrid = np.meshgrid(H0, Om[60:150])
-likelihood = likelihood[60:150, :]
-surf = ax3.plot_surface(Hgrid/1000, Omgrid, likelihood, cmap=cm.jet)
-ax3.set_ylabel('$\Omega_{m} $', fontsize=16)
-ax3.set_xlabel('$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=16)
-ax3.set_zlabel('likelihood', fontsize=16)
+fig4.colorbar(heatmap)
 
 # %%
 
-# Mrginalised over H0 with full range:
+# Mrginalised around Riessvalue
 
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(70-76) chisq(Om, H0).xlsx')
@@ -113,7 +104,7 @@ chisq_array = chisq_array_init[:, 1:]
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 500)
 c = 3 * 10**8  # light speed
 
 # finding minimum of chisquared coords
@@ -134,8 +125,9 @@ lik_margin /= np.sum(lik_margin)
 # set up figure + visuals and plot it:
 fig5 = plt.figure()
 ax5 = fig5.gca()
-ax5.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=16)
-ax5.set_xlabel(r'$\Omega_{m}$', fontsize=16)
+ax5.tick_params(labelsize=16)
+ax5.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=20)
+ax5.set_xlabel(r'$\Omega_{m}$', fontsize=20)
 ax5.plot(Om, lik_margin)
 
 # find peak value and where 68.3% of it lies for 1 \sigma error
@@ -170,7 +162,7 @@ c = 3 * 10**8
 # set up the model axis
 H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
-z = np.linspace(np.min(df['z']), 1.8, 100)
+z = np.linspace(np.min(df['z']), 1.8, 500)
 
 # finding minimum of chisquared coords
 chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
@@ -204,7 +196,7 @@ fig4 = plt.figure()
 ax4 = fig4.gca()
 ax4.tick_params(labelsize=16)
 ax4.set_ylabel('$\Omega_{m} $', fontsize=20)
-ax4.set_xlabel('$H_0 \ (m s^{-1} Mpc^{-1})$', fontsize=20)
+ax4.set_xlabel('$H_0 \ (km s^{-1} Mpc^{-1})$', fontsize=20)
 contour_likelihood = ax4.contour(Hgrid/1000, Omgrid, likelihood, heights, cmap=cm.jet)
 #ax4.clabel(contour_likelihood)
 
