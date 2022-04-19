@@ -74,8 +74,7 @@ H0 = 70*10**3  # taking 70km s^-1 Mpc^-1
 c = 3 * 10**8
 Om, OL = 0.23, 0.77
 
-# set up figure and visuals
-fig = plt.figure()
+fig = plt.figure()  # set up figure and visuals:
 ax = fig.gca()
 ax.tick_params(labelsize=16)
 ax.set_xlabel(r'$Redshift \ z$', fontsize=20)
@@ -86,18 +85,14 @@ ax.errorbar(df['z'], df['mu'], yerr=df['dmu'],
             capsize=2, fmt='.', markersize=5, ecolor='k')
 
 '''Model'''
-# redshift axis
-z = np.linspace(np.min(df['z']), 1.8, 500)
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+z = np.linspace(np.min(df['z']), 1.8, 500)  # redshift axis
+z10 = np.linspace(0, z, 1000)  # inetrgal approximation axis (z')
 
-# inetrgal approximation axis (z')
-z10 = np.linspace(0, z, 1000)
-
+# develop model
 int_arg = 1/np.sqrt(Om*(1+z10)**3 + 1 - Om)
 dl_sum = np.sum(int_arg, axis=0)
 dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum
-mu_model = 5*np.log10(dl_model) + 25
+mu_model = 5*np.log10(dl_model) + 25  # transfrom to distance moduli
 
 # plot model on top of data
 plt.plot(z, mu_model)
