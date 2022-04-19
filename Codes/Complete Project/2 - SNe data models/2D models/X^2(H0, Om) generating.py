@@ -25,7 +25,7 @@ z = np.linspace(np.min(df['z']), 1.8, 500)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
 
-z1000 = np.linspace(0, z, 500)  # inetrgal approximation axis
+z10 = np.linspace(0, z, 500)  # inetrgal approximation axis
 
 i = 0
 k = 0
@@ -35,7 +35,7 @@ while i < len(H0):
     k = 0
     while k < len(Om):
         # model for d_{L}
-        combs = 1/np.sqrt(Om[k]*(1+z1000)**3 - Om[k] + 1)
+        combs = 1/np.sqrt(Om[k]*(1+z10)**3 - Om[k] + 1)
         dl1_sum = np.sum(combs, axis=0)
         dl1_model = (c/H0[i])*(1+z)*z/1000 * dl1_sum
         
