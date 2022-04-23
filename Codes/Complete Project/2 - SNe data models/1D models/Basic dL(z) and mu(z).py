@@ -127,7 +127,7 @@ ax.set_ylabel(r'$Distance \ Modulus \ \mu$', fontsize=20)
 
 # plot the data as errorbar plot
 ax.errorbar(df['z'], df['mu'], yerr=df['dmu'],
-            capsize=2, fmt='.', markersize=3, ecolor='k')
+            capsize=1.5, fmt='.', markersize=4, ecolor='k')
 
 # redshift axis
 z = np.linspace(np.min(df['z']), 1.5, 500)
@@ -153,10 +153,11 @@ mu_interp = np.interp(df['z'], z, mu_model)
 # set up axis for residuals
 box = fig.add_axes((0.05, 0.10, 0.90, 0.15))
 
+box.tick_params(labelsize=16)
 box.set_xlabel(r'$Redshift \ z$', fontsize=20)
 
 box.errorbar(df['z'], df['mu'] - mu_interp, yerr=df['dmu'],
-            capsize=2, fmt='.', markersize=3, ecolor='k')
+            capsize=1.5, fmt='.', markersize=4, ecolor='k')
 
 box.axhline(0, color='r', linestyle='--')
 
