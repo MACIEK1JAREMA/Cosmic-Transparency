@@ -23,18 +23,16 @@ Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 500)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
-z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis z'
+z10 = np.linspace(0, z, 1000)  # inetrgal approximation axis z'
 
-i = 0  # counter
-chisq_array = np.array([])  # array to store result chi^2
+i = 0  # loop counter
+chisq_array = np.array([])  # array to store chi^2 results
 
-# loop over developing models
 while i < len(Om):
-    
     # model for d_L
-    int_arg = 1/np.sqrt(Om[i]*(1+z1000)**3 + 1 - Om[i])  # integrand
+    int_arg = 1/np.sqrt(Om[i]*(1+z10)**3 + 1 - Om[i])  # integrand
     dl_sum = np.sum(int_arg, axis=0)  # integral result
-    dl_model = (c/H0)*(1+z)*(z/1000) * dl_sum  # model
+    dl_model = (c/H0)*(1+z)*(z/len(z10)) * dl_sum  # model
     
     # convert to mu vs z to compare to data.
     dlmu_model = 5*np.log10(dl_model) + 25
@@ -46,8 +44,7 @@ while i < len(Om):
     chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
     chisq_array = np.append(chisq_array, chisq)
     
-    # increment Om
-    i += 1
+    i += 1  # increment Om
 
 
 # get minimum value for Om and chi^2
