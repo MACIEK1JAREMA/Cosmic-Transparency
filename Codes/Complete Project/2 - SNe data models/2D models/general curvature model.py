@@ -24,8 +24,8 @@ H0 = 70*10**3
 c = 3 * 10**8
 
 # set up the model axis
-OL = np.linspace(0, 1.4, 50)
-Om = np.linspace(0, 1, 50)
+OL = np.linspace(0, 1.4, 500)
+Om = np.linspace(0, 1, 500)
 z = np.linspace(np.min(df['z']), 1.8, 300)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -79,6 +79,18 @@ while i < len(Om):
     print(f'Completed i={i} out of {len(Om)}')
     i += 1
 
+
+# saving results
+dataframe = pd.DataFrame(chisq_array)
+
+# writing to Excel
+datatoexcel = pd.ExcelWriter('general curvature chi^2 (500, 500).xlsx')
+dataframe.to_excel(datatoexcel)
+datatoexcel.save()
+
+print('DataFrame is written to Excel File successfully.')
+
+# timer
 end = time.perf_counter()
 print(f'time to run: {end - start}')
 
