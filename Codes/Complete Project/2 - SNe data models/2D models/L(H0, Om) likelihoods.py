@@ -113,7 +113,7 @@ fig2.colorbar(heatmap)
 
 # %%
 
-# Mrginalised over H_{0} flat in [70, 76]
+# Mrginalised over H_{0} flat in [60, 80]
 
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
