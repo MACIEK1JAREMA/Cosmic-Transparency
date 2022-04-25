@@ -116,12 +116,12 @@ fig2.colorbar(heatmap)
 # Mrginalised over H_{0} flat in [70, 76]
 
 # Read in generated array for chi^2
-chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(70-76) chisq(Om, H0).xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
 # set up the model axis
-H0 = np.linspace(70, 76, 300)*10**3
+H0 = np.linspace(60, 80, 300)*10**3
 Om = np.linspace(0, 1, 300)
 z = np.linspace(np.min(df['z']), 1.8, 500)
 c = 3 * 10**8  # light speed
@@ -194,14 +194,6 @@ likelihood = np.exp((-chisq_array**2)/2)
 
 # multipying likelihood by Gaussian
 weighted = np.multiply(likelihood, g)
-
-fig4 = plt.figure()
-ax4 = fig4.gca()
-ax4.tick_params(labelsize=16)
-ax4.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=20)
-ax4.set_xlabel(r'$\Omega_{m}$', fontsize=20)
-ax4.plot(Om, lik_margin)
-
 
 # marginalising over H0
 lik_margin = np.trapz(weighted, x=H0, axis=1)  # integrating along columns(along H0)
