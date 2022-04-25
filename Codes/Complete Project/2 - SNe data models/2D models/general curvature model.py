@@ -102,8 +102,8 @@ print(f'time to run: {end - start}')
 fig = plt.figure()
 ax = fig.gca()
 ax.tick_params(labelsize=16)
-ax.set_xlabel(r'$\Omega_{m}$', fontsize=18)
-ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=18)
+ax.set_xlabel(r'$\Omega_{m}$', fontsize=20)
+ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=20)
 
 # reduce it to wanted range
 chisq_array -= np.min(chisq_array)
