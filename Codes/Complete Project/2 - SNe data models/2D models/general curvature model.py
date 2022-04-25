@@ -98,6 +98,19 @@ print(f'time to run: {end - start}')
 
 # plotting found chi^2
 
+# Read in generated array
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\general curvature chi^2 (500, 500).xlsx')
+# Note, the file was moved after saving
+chisq_array_init = np.array(chisq_df)
+chisq_array = chisq_array_init[:, 1:]
+
+# define constant
+c = 3 * 10**8
+
+# set up the model axis
+OL = np.linspace(0, 1.4, 500)
+Om = np.linspace(0, 1, 500)
+
 # set up figure and visuals for chi^2 plot
 fig = plt.figure()
 ax = fig.gca()
@@ -121,21 +134,3 @@ min_OL = OL[index[1]]
 print(f'Minimum Om is: {min_Om}')
 print('\n')
 print(f'Minimum OL is: {min_OL}')
-
-
-# %%
-
-# saving results
-'''(make sure to change names each time it's run)'''
-
-dataframe = pd.DataFrame(chisq_array)
-
-# writing to Excel
-datatoexcel = pd.ExcelWriter('gen curvature wrong chi^2 (500, 500).xlsx')
-
-# write DataFrame to excel
-dataframe.to_excel(datatoexcel)
-
-# save the excel
-datatoexcel.save()
-print('DataFrame is written to Excel File successfully.')

@@ -24,8 +24,8 @@ H0 = 70*10**3
 c = 3 * 10**8
 
 # set up the model axis
-OL = np.linspace(0, 1.4, 50)
-Om = np.linspace(0, 1, 50)
+OL = np.linspace(0, 1.4, 500)
+Om = np.linspace(0, 1, 500)
 z = np.linspace(np.min(df['z']), 1.8, 300)
 count = np.linspace(0, len(z)-1, len(z)).astype(int)
 count = list(count)
@@ -79,6 +79,18 @@ while i < len(Om):
     print(f'Completed i={i} out of {len(Om)}')
     i += 1
 
+
+# saving results
+dataframe = pd.DataFrame(chisq_array)
+
+# writing to Excel
+datatoexcel = pd.ExcelWriter('general curvature chi^2 (500, 500).xlsx')
+dataframe.to_excel(datatoexcel)
+datatoexcel.save()
+
+print('DataFrame is written to Excel File successfully.')
+
+# timer
 end = time.perf_counter()
 print(f'time to run: {end - start}')
 
@@ -86,12 +98,25 @@ print(f'time to run: {end - start}')
 
 # plotting found chi^2
 
+# Read in generated array
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\general curvature chi^2 (500, 500).xlsx')
+# Note, the file was moved after saving
+chisq_array_init = np.array(chisq_df)
+chisq_array = chisq_array_init[:, 1:]
+
+# define constant
+c = 3 * 10**8
+
+# set up the model axis
+OL = np.linspace(0, 1.4, 500)
+Om = np.linspace(0, 1, 500)
+
 # set up figure and visuals for chi^2 plot
 fig = plt.figure()
 ax = fig.gca()
 ax.tick_params(labelsize=16)
-ax.set_xlabel(r'$\Omega_{m}$', fontsize=18)
-ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=18)
+ax.set_xlabel(r'$\Omega_{m}$', fontsize=20)
+ax.set_ylabel(r'$\Omega_{\Lambda}$', fontsize=20)
 
 # reduce it to wanted range
 chisq_array -= np.min(chisq_array)
@@ -109,21 +134,3 @@ min_OL = OL[index[1]]
 print(f'Minimum Om is: {min_Om}')
 print('\n')
 print(f'Minimum OL is: {min_OL}')
-
-
-# %%
-
-# saving results
-'''(make sure to change names each time it's run)'''
-
-dataframe = pd.DataFrame(chisq_array)
-
-# writing to Excel
-datatoexcel = pd.ExcelWriter('gen curvature wrong chi^2 (500, 500).xlsx')
-
-# write DataFrame to excel
-dataframe.to_excel(datatoexcel)
-
-# save the excel
-datatoexcel.save()
-print('DataFrame is written to Excel File successfully.')

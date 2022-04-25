@@ -18,7 +18,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\gen curvature chi^2 (300, 300).xlsx')
+chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\general curvature chi^2 (500, 500).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
