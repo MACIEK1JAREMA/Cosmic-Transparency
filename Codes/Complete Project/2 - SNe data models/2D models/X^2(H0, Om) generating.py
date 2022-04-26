@@ -18,6 +18,7 @@ c = 3 * 10**8
 
 # set up the model axis
 H0 = np.linspace(70, 76, 300)*10**3
+#H0 = np.linspace(60, 80, 300)*10**3  # other dataset
 
 Om = np.linspace(0, 1, 300)
 
@@ -28,7 +29,6 @@ count = list(count)
 z10 = np.linspace(0, z, 500)  # inetrgal approximation axis
 
 i = 0
-k = 0
 chisq_array = np.zeros(np.shape(np.meshgrid(H0, Om)[0]))
 
 while i < len(H0):
@@ -36,14 +36,14 @@ while i < len(H0):
     while k < len(Om):
         # model for d_{L}
         combs = 1/np.sqrt(Om[k]*(1+z10)**3 - Om[k] + 1)
-        dl1_sum = np.sum(combs, axis=0)
-        dl1_model = (c/H0[i])*(1+z)*z/500 * dl1_sum
+        dl_sum = np.sum(combs, axis=0)
+        dl_model = (c/H0[i])*(1+z)*z/500 * dl_sum
         
         # convert to mu vs z to compare to data.
-        dl1mu_model = 5*np.log10(dl1_model) + 25
+        mu_model = 5*np.log10(dl_model) + 25
         
         # interpolate the values in the grid as they are generated
-        interp = np.interp(df['z'], z, dl1mu_model)
+        interp = np.interp(df['z'], z, mu_model)
         
         # get chi^2 value for this Om and save to its array
         chisq = np.sum(((interp - df['mu'])/(df['dmu']))**2)
