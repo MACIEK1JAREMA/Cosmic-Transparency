@@ -54,7 +54,7 @@ likelihood *= 1/norm
 print(f'Our integration of likelihood before normalising: {np.round(norm, 4)}')
 
 # give it to the confidence fucntion to get sigma regions:
-heights = module.confidence(likelihood, epsgrid, Omgrid, accu=10000, interp=1000)
+heights = module.confidence(likelihood, epsgrid, Omgrid, accu=1000, interp=1000)
 
 # plot as a contour map and heat map
 fig4 = plt.figure()
@@ -66,7 +66,8 @@ contour_likelihood = ax4.contour(epsgrid, Omgrid, likelihood, heights, cmap=cm.j
 #ax4.clabel(contour_likelihood)
 
 heatmap = ax4.pcolormesh(epsgrid, Omgrid, likelihood)
-fig4.colorbar(heatmap)
+cbar = fig4.colorbar(heatmap)
+cbar.ax.tick_params(labelsize=16)
 
 # %%
 

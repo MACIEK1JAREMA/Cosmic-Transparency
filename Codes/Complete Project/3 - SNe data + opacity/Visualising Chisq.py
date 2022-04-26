@@ -43,12 +43,12 @@ epsilgrid, Omgrid = np.meshgrid(epsil, Om)
 fig1 = plt.figure()
 ax1 = fig1.gca()
 ax1.tick_params(labelsize=16)
-ax1.set_ylabel('$\Omega_{m} $', fontsize=16)
-ax1.set_xlabel('$\epsilon$', fontsize=16)
+ax1.set_ylabel('$\Omega_{m} $', fontsize=20)
+ax1.set_xlabel('$\epsilon$', fontsize=20)
 ax1.plot(min_epsil, min_Om, 'rx')  # minimum value pointer
 
 # plot as heatmap and then add contours
 heatmap = ax1.pcolormesh(epsilgrid, Omgrid, chisq_array)
 contourplot = ax1.contour(epsilgrid, Omgrid, chisq_array, np.array([2.30, 4.61, 11.8]), cmap=cm.jet)
-#ax1.clabel(contourplot)
-fig1.colorbar(heatmap)
+cbar = fig1.colorbar(heatmap)
+cbar.ax.tick_params(labelsize=16)

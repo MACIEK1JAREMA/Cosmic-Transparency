@@ -128,7 +128,7 @@ def confidence(F, xg, yg, accu, interp=0, interp_kind='linear'):
 # test the above
 if __name__ == '__main__':
     # define 2D grids
-    v = np.linspace(0, 1, 1000)
+    v = np.linspace(0, 1, 2000)
     xg, yg = np.meshgrid(v, v)
     
     # define a 2D unnormalised gaussian:
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     print(f'Our intgeration fucntion gave: {np.round(norm, 4)}')
     
     # give it to the confidence fucntion to get sigma regions:
-    levels = confidence(F, xg, yg, accu=1000)
+    levels = confidence(F, xg, yg, accu=3000)
     
     # plot these as contours on a conour map
     fig = plt.figure()
