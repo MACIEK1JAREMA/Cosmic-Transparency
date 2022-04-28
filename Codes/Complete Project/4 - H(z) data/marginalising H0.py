@@ -161,7 +161,7 @@ lik_margin /= np.sum(lik_margin)
 fig2 = plt.figure()
 ax2 = fig2.gca()
 ax2.tick_params(labelsize=16)
-ax2.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=20)
+ax2.set_ylabel(r'$L(\Omega_{m})$', fontsize=20)
 ax2.set_xlabel(r'$\Omega_{m}$', fontsize=20)
 ax2.plot(Om, lik_margin)
 
@@ -222,7 +222,7 @@ confidence2 = Om_found - variables.interval(0.683)[0]
 fig2 = plt.figure()
 ax2 = fig2.gca()
 ax2.tick_params(labelsize=16)
-ax2.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ L(\Omega_{m})$', fontsize=20)
+ax2.set_ylabel(r'$L(\Omega_{m})$', fontsize=20)
 ax2.set_xlabel(r'$\Omega_{m}$', fontsize=20)
 ax2.plot(Om, lik_margin)
 

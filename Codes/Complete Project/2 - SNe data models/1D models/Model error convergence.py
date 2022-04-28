@@ -65,6 +65,7 @@ OL = 0.77
 
 # set up figure and visuals
 fig = plt.figure()
+fig.subplots_adjust(hspace=0.4,left=0.2, right=0.8)
 ax1 = fig.add_subplot(221)
 ax2 = fig.add_subplot(222)
 ax3 = fig.add_subplot(223)
@@ -73,10 +74,10 @@ ax1.tick_params(labelsize=16)
 ax2.tick_params(labelsize=16)
 ax3.tick_params(labelsize=16)
 ax4.tick_params(labelsize=16)
-ax3.set_xlabel(r'$Number \ of \ points $', fontsize=20)
-ax4.set_xlabel(r'$Number \ of \ points $', fontsize=20)
-ax1.set_ylabel(r'$relative \ error\  [\%] $', fontsize=20)
-ax3.set_ylabel(r'$relative \ error\  [\%] $', fontsize=20)
+ax3.set_xlabel(r'$N$', fontsize=20)
+ax4.set_xlabel(r'$N$', fontsize=20)
+ax1.set_ylabel(r'$Relative \ error\  [\%] $', fontsize=20)
+ax3.set_ylabel(r'$Relative \ error\  [\%] $', fontsize=20)
 
 # Calculate the model for a rnage of accuracies in z10, saving a few chosen dL
 
@@ -151,7 +152,7 @@ data_errs = np.append(data_errs, data_err*100)  # in %
 
 # plot all on the made axis, with correspionding titles, semiautomatically
 for i in range(0, num):
-    exec('ax' + str(i+1) + '.set_title(rf\'$Probing \ at \ z= {round(z[z_i[i]], 2)}$\', fontsize=20)')
+    exec('ax' + str(i+1) + '.set_title(rf\'$z= {round(z[z_i[i]], 2)}$\', fontsize=20)')
     exec('ax' + str(i+1) + '.plot(accuracy[1:], change[i, :], ' + '\'k-\' )')
     exec('ax' + str(i+1) + '.axhline(data_errs[i],' + ' color=\'c\', ls=\'-.\', label=rf\'$ data \ error \ = \ {round(data_errs[i], 2)} \% $\' )')
     exec('ax' + str(i+1) + '.axhline(1,' + ' color=\'r\', ls=\'-.\', label=r\'$1\%$\')')
