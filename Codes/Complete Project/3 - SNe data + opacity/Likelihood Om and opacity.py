@@ -104,7 +104,7 @@ lik_margin /= np.sum(lik_margin)
 fig5 = plt.figure()
 ax5 = fig5.gca()
 ax5.tick_params(labelsize=16)
-ax5.set_ylabel(r'$Likelihood \ marginalised \ over \ H_{0} \ and \ \Omega_{m} \ L(\epsilon)$', fontsize=20)
+ax5.set_ylabel(r'$L(\epsilon)$', fontsize=20)
 ax5.set_xlabel(r'$\epsilon$', fontsize=20)
 ax5.plot(eps, lik_margin)
 
