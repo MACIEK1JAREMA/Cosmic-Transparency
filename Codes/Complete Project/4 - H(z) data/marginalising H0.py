@@ -120,7 +120,7 @@ Om = np.linspace(0, 0.6, 500)
 Hgrid, Omgrid = np.meshgrid(H0, Om)
 chisq_array -= np.min(chisq_array)
 
-like = np.exp(-(chisq_array**2)/2)
+like = np.exp(-(chisq_array)/2)
 
 # find confidences in likelihood with our own function for this:
 
@@ -193,7 +193,7 @@ Om = np.linspace(0, 0.6, 500)
 Hgrid, Omgrid = np.meshgrid(H0, Om)
 chisq_array -= np.min(chisq_array)
 
-like = np.exp((-chisq_array**2)/2)
+like = np.exp((-chisq_array)/2)
 
 # #############################################################################
 # Gaussian prior marginalising

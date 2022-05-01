@@ -83,7 +83,7 @@ min_H0 = H0[index[1]]
 Hgrid, Omgrid = np.meshgrid(H0, Om)
 
 # switch to likelihoods
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 
 # find confidences in likelihood with our own function for this:
@@ -133,7 +133,7 @@ min_Om = Om[index[0]]
 min_H0 = H0[index[1]]
 
 # switch to likelihoods
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 # marginalising over H0 - with flat prior:
 lik_margin = np.sum(likelihood, axis=1)
@@ -190,7 +190,7 @@ likelihood = np.exp((-chisq_array**2)/2)
 g = 1/(np.sqrt(2*np.pi)) * np.exp(-((H0/1000)-73)**2/2)
 
 # switch to likelihoods
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 # multipying likelihood by Gaussian
 weighted = np.multiply(likelihood, g)

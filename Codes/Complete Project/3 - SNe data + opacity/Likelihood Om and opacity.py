@@ -42,7 +42,7 @@ min_eps = eps[index[1]]
 epsgrid, Omgrid = np.meshgrid(eps, Om)
 
 # switch to likelihoods
-likelihood = np.exp(-(chisq_array**2)/2)
+likelihood = np.exp(-(chisq_array)/2)
 
 # find confidences in likelihood with our own function for this:
 
@@ -92,7 +92,7 @@ min_Om = Om[index[0]]
 min_eps = eps[index[1]]
 
 # switch to likelihoods
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 # marginalising over Om - with flat prior:
 lik_margin = np.sum(likelihood, axis=0)
@@ -150,7 +150,7 @@ chisq_array -= np.min(chisq_array)  # define min chi^2 to be 0
 g = np.exp(-(Om - 0.23)**2/(2* 0.05**2))/(0.05*np.sqrt(2*np.pi))
 
 # switch to likelihoods
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 # multipying likelihood by Gaussian
 #weighted = likelihood * g  # need to multiply all rows for set column by all values of g

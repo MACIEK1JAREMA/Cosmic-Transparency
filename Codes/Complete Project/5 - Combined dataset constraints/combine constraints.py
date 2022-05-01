@@ -1,6 +1,4 @@
 '''
-Our first attempt at combining the two datasets
-
 Read in both chi^2 files, get likelihoods,
 find confidence regions in 2D SNe results, plot them,
 then find them on H(z) 1D χ^2 extend them over the whole
@@ -47,7 +45,7 @@ min_eps = eps[index[1]]
 epsgrid, Omgrid = np.meshgrid(eps, Om)
 
 # switch to likelihoods
-likelihood_SNe = np.exp((-chisq_array**2)/2)
+likelihood_SNe = np.exp((-chisq_array)/2)
 
 # find confidences in likelihood with our own function for this:
 
@@ -84,7 +82,7 @@ epsgrid, Omgrid = np.meshgrid(eps, Om)
 chisq_array -= np.min(chisq_array)
 
 # likelihood
-like = np.exp(-(chisq_array**2)/2)
+like = np.exp(-(chisq_array)/2)
 
 # flat prior marginalising
 
@@ -138,7 +136,7 @@ min_eps = eps[index[1]]
 epsgrid, Omgrid = np.meshgrid(eps, Om)
 
 # switch to likelihoods
-likelihood_SNe = np.exp((-chisq_array**2)/2)
+likelihood_SNe = np.exp((-chisq_array)/2)
 
 # ############################################################################
 # H(z) data
@@ -155,7 +153,7 @@ epsgrid, Omgrid = np.meshgrid(eps, Om)
 chisq_array -= np.min(chisq_array)
 
 # likelihood
-like = np.exp(-(chisq_array**2)/2)
+like = np.exp(-(chisq_array)/2)
 
 # flat prior marginalising
 
@@ -268,7 +266,7 @@ min_eps = eps[index[1]]
 epsgrid, Omgrid = np.meshgrid(eps, Om)
 
 # switch to likelihoods
-likelihood_SNe = np.exp((-chisq_array**2)/2)
+likelihood_SNe = np.exp((-chisq_array)/2)
 
 # find confidences in likelihood with our own function for this:
 
@@ -301,7 +299,7 @@ chisq_array = chisq_array_init[:, 1:]
 chisq_array -= np.min(chisq_array)  # prepare chi^2
 
 # likelihood
-like = np.exp(-(chisq_array**2)/2)
+like = np.exp(-(chisq_array)/2)
 
 # Gaussian prior marginalising
 
@@ -362,7 +360,7 @@ min_eps = eps[index[1]]
 epsgrid, Omgrid = np.meshgrid(eps, Om)
 
 # switch to likelihoods
-likelihood_SNe = np.exp((-chisq_array**2)/2)
+likelihood_SNe = np.exp((-chisq_array)/2)
 
 # ############################################################################
 # H(z) data
@@ -380,7 +378,7 @@ epsgrid, Omgrid = np.meshgrid(eps, Om)
 chisq_array -= np.min(chisq_array)
 
 # likelihood
-like = np.exp(-(chisq_array**2)/2)
+like = np.exp(-(chisq_array)/2)
 
 
 # Gaussian prior marginalising

@@ -74,7 +74,7 @@ chisq_array = chisq_array[in_index]  # only keep in wanted region
 Om = Om[in_index]  # crop Om accordingly
 
 # define likelihood from these:
-likelihood = np.exp((-chisq_array**2)/2)
+likelihood = np.exp((-chisq_array)/2)
 
 # normalise to sum=1 for rv.discrete to find confidencre regions
 likelihood /= np.sum(likelihood)
