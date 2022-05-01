@@ -19,7 +19,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\chisquared including opacity(200 points).xlsx')
+chisq_df = pd.read_excel('data\\Final datasets\\chisq with opacity corrected (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -27,8 +27,8 @@ chisq_array = chisq_array_init[:, 1:]
 c = 3 * 10**8
 
 # set up the model axis
-eps = np.linspace(-1, 1, 200)
-Om = np.linspace(0, 1, 500)
+eps = np.linspace(-0.3, 0.3, 500)
+Om = np.linspace(0, 0.6, 500)
 z = np.linspace(np.min(df['z']), 1.8, 100)
 
 # finding minimum of chisquared coords
@@ -74,7 +74,7 @@ fig4.colorbar(heatmap)
 # flat prior in Om
 
 # Read in generated array for chi^2
-chisq_df = pd.read_excel('data\\chisquared including opacity(200 points).xlsx')
+chisq_df = pd.read_excel('data\\Final datasets\\chisq with opacity corrected (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
@@ -129,7 +129,7 @@ df = pd.read_excel('data\\SNe data.xlsx')
 df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array
-chisq_df = pd.read_excel('data\\chisquared including opacity(200 points).xlsx')
+chisq_df = pd.read_excel('data\\Final datasets\\chisq with opacity corrected (500 points).xlsx')
 chisq_array_init = np.array(chisq_df)
 chisq_array = chisq_array_init[:, 1:]
 
