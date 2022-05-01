@@ -109,11 +109,16 @@ contour_likelihood = ax2.contour(Hgrid/1000, Omgrid, likelihood, heights, cmap=c
 #ax2.clabel(contour_likelihood)
 
 heatmap = ax2.pcolormesh(Hgrid/1000, Omgrid, likelihood)
-fig2.colorbar(heatmap)
+cbar = fig2.colorbar(heatmap)
+cbar.ax.tick_params(labelsize=16)
 
 # %%
 
-# Mrginalised over H_{0} flat in [60, 80]
+# Marginalised over H_{0} flat in [60, 80]
+
+# Read in Sne data as pandas dataframe
+df = pd.read_excel('Codes\\Complete Project\\Datasets\\SNe data.xlsx')
+df = df.sort_values('z')  # increasing z sort
 
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(60-80) chisq(Om, H0).xlsx')
