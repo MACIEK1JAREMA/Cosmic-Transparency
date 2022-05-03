@@ -64,7 +64,7 @@ def confidence(F, xg, yg, accu, interp=0, interp_kind='linear'):
     -- F - 2D np.ndarray to integrate
     -- xg - 2D np.ndarray grid of x values F is evaluated at
     -- yg - 2D np.ndarray grid of y values F is evaluated at
-    -- accuracy to use in height, to small will be inacurate, too large will
+    -- accu - accuracy to use in height, to small will be inacurate, too large will
         raise errors, as no points will lie in F above values 1 step
         lower than maximum
     -- interp - int, if > 10, we interpolate grids and F to that size,

@@ -117,8 +117,8 @@ c = 3 * 10**8
 Om = np.linspace(0, 1, 500)
 #z = np.linspace(0, 1.8, 100)
 z = np.linspace(np.min(df['z']), 1.8, 500)
-count = np.linspace(0, len(z)-1, len(z)).astype(int)
-count = list(count)
+#count = np.linspace(0, len(z)-1, len(z)).astype(int)
+#count = list(count)
 
 z1000 = np.linspace(0, z, 1000)  # inetrgal approximation axis
 
@@ -130,11 +130,13 @@ Mth = []
 
 while i < len(Om):
     # model from list comprehension
-    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
-    dl_sum = np.sum(combs, axis=1)
+    combs = 1/np.sqrt(Om[i]*(1+z1000)**3 - Om[i] + 1)
+    dl_sum = np.sum(combs, axis=0)
     dl_model = (c/H0)*(1+z)*z/1000 * dl_sum
-    
-    #dl_model[0] = dl_model[1] - (dl_model[2] - dl_model[1])
+#    combs = [1/np.sqrt(Om[i]*(1+z1000[:,j])**3 - Om[i] + 1) for j in count[:]]
+#    dl_sum = np.sum(combs, axis=1)
+#    dl_model = (c/H0)*(1+z)*z/1000 * dl_sum
+#    dl_model[0] = dl_model[1] - (dl_model[2] - dl_model[1])
     
     # interpolate the values to match data size
     dl_model_interp = np.interp(x=df['z'], xp=z, fp=dl_model)
