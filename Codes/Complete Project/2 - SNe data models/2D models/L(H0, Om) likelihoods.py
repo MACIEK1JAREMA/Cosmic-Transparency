@@ -169,7 +169,7 @@ print(f'                -{round(confidence2[0], 6)}')
 
 # %%
 
-# Marginalised with gaussian at 73.03 with +- 1.04 as in Riess et al. 2022
+# Marginalised with Gaussian at 73.03 with +- 1.04 as in Riess et al. 2022
 
 # Read in generated array for chi^2
 chisq_df = pd.read_excel('Codes\\Complete Project\\Datasets\\(70-76) chisq(Om, H0).xlsx')
